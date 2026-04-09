@@ -5,3 +5,6 @@ export * from "./payments";
 export * from "./compliance";
 export * from "./onboarding";
 export * from "./notifications";
+export * from "./users";
+export * from "./auth_sessions";
+export * from "./onboarding_sessions";

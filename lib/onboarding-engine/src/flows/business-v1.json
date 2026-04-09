@@ -1,0 +1,329 @@
+{
+  "id": "business",
+  "version": "v1",
+  "titleKey": "flows.business.title",
+  "descriptionKey": "flows.business.description",
+  "steps": [
+    {
+      "id": "welcome",
+      "type": "info",
+      "titleKey": "steps.biz_welcome.title",
+      "descriptionKey": "steps.biz_welcome.description",
+      "fields": [],
+      "defaultNextStepId": "company_info"
+    },
+    {
+      "id": "company_info",
+      "type": "question",
+      "titleKey": "steps.company_info.title",
+      "descriptionKey": "steps.company_info.description",
+      "fields": [
+        {
+          "id": "companyName",
+          "type": "text",
+          "labelKey": "fields.companyName.label",
+          "required": true
+        },
+        {
+          "id": "legalName",
+          "type": "text",
+          "labelKey": "fields.legalName.label",
+          "required": true
+        },
+        {
+          "id": "industry",
+          "type": "select",
+          "labelKey": "fields.industry.label",
+          "required": true,
+          "options": [
+            { "value": "technology", "labelKey": "fields.industry.options.technology" },
+            { "value": "finance", "labelKey": "fields.industry.options.finance" },
+            { "value": "healthcare", "labelKey": "fields.industry.options.healthcare" },
+            { "value": "retail", "labelKey": "fields.industry.options.retail" },
+            { "value": "manufacturing", "labelKey": "fields.industry.options.manufacturing" },
+            { "value": "other", "labelKey": "fields.industry.options.other" }
+          ]
+        },
+        {
+          "id": "companySize",
+          "type": "radio",
+          "labelKey": "fields.companySize.label",
+          "required": true,
+          "options": [
+            { "value": "1-10", "labelKey": "fields.companySize.options.micro" },
+            { "value": "11-50", "labelKey": "fields.companySize.options.small" },
+            { "value": "51-200", "labelKey": "fields.companySize.options.medium" },
+            { "value": "201-1000", "labelKey": "fields.companySize.options.large" },
+            { "value": "1000+", "labelKey": "fields.companySize.options.enterprise" }
+          ]
+        }
+      ],
+      "defaultNextStepId": "hq_country"
+    },
+    {
+      "id": "hq_country",
+      "type": "question",
+      "titleKey": "steps.hq_country.title",
+      "descriptionKey": "steps.hq_country.description",
+      "fields": [
+        {
+          "id": "country",
+          "type": "country",
+          "labelKey": "fields.hqCountry.label",
+          "required": true
+        }
+      ],
+      "defaultNextStepId": "hiring_intent"
+    },
+    {
+      "id": "hiring_intent",
+      "type": "question",
+      "titleKey": "steps.hiring_intent.title",
+      "descriptionKey": "steps.hiring_intent.description",
+      "fields": [
+        {
+          "id": "hiringIntent",
+          "type": "radio",
+          "labelKey": "fields.hiringIntent.label",
+          "required": true,
+          "options": [
+            { "value": "eor", "labelKey": "fields.hiringIntent.options.eor" },
+            { "value": "contractor", "labelKey": "fields.hiringIntent.options.contractor" },
+            { "value": "global_payroll", "labelKey": "fields.hiringIntent.options.global_payroll" },
+            { "value": "us_peo", "labelKey": "fields.hiringIntent.options.us_peo" }
+          ]
+        }
+      ],
+      "nextRules": [
+        {
+          "logic": "AND",
+          "conditions": [
+            { "field": "hiringIntent", "op": "eq", "value": "eor" }
+          ],
+          "nextStepId": "eor_worker_country"
+        },
+        {
+          "logic": "AND",
+          "conditions": [
+            { "field": "hiringIntent", "op": "eq", "value": "contractor" }
+          ],
+          "nextStepId": "contractor_details"
+        },
+        {
+          "logic": "AND",
+          "conditions": [
+            { "field": "hiringIntent", "op": "eq", "value": "global_payroll" }
+          ],
+          "nextStepId": "gp_entity_confirm"
+        },
+        {
+          "logic": "AND",
+          "conditions": [
+            { "field": "hiringIntent", "op": "eq", "value": "us_peo" }
+          ],
+          "nextStepId": "peo_state_select"
+        }
+      ],
+      "defaultNextStepId": "billing_setup"
+    },
+    {
+      "id": "eor_worker_country",
+      "type": "question",
+      "titleKey": "steps.eor_worker_country.title",
+      "descriptionKey": "steps.eor_worker_country.description",
+      "visibilityRules": {
+        "logic": "AND",
+        "conditions": [{ "field": "hiringIntent", "op": "eq", "value": "eor" }]
+      },
+      "fields": [
+        {
+          "id": "workerCountry",
+          "type": "country",
+          "labelKey": "fields.workerCountry.label",
+          "required": true
+        },
+        {
+          "id": "grossSalary",
+          "type": "text",
+          "labelKey": "fields.grossSalary.label",
+          "placeholderKey": "fields.grossSalary.placeholder",
+          "required": true
+        },
+        {
+          "id": "salaryCurrency",
+          "type": "currency",
+          "labelKey": "fields.salaryCurrency.label",
+          "required": true
+        }
+      ],
+      "defaultNextStepId": "eor_quote"
+    },
+    {
+      "id": "eor_quote",
+      "type": "info",
+      "titleKey": "steps.eor_quote.title",
+      "descriptionKey": "steps.eor_quote.description",
+      "visibilityRules": {
+        "logic": "AND",
+        "conditions": [{ "field": "hiringIntent", "op": "eq", "value": "eor" }]
+      },
+      "fields": [],
+      "defaultNextStepId": "billing_setup"
+    },
+    {
+      "id": "contractor_details",
+      "type": "question",
+      "titleKey": "steps.contractor_details.title",
+      "descriptionKey": "steps.contractor_details.description",
+      "visibilityRules": {
+        "logic": "AND",
+        "conditions": [{ "field": "hiringIntent", "op": "eq", "value": "contractor" }]
+      },
+      "fields": [
+        {
+          "id": "workerCountry",
+          "type": "country",
+          "labelKey": "fields.workerCountry.label",
+          "required": true
+        },
+        {
+          "id": "contractorEntityType",
+          "type": "radio",
+          "labelKey": "fields.contractorEntityType.label",
+          "required": true,
+          "options": [
+            { "value": "individual", "labelKey": "fields.entityType.options.individual" },
+            { "value": "company", "labelKey": "fields.entityType.options.company" }
+          ]
+        }
+      ],
+      "defaultNextStepId": "billing_setup"
+    },
+    {
+      "id": "gp_entity_confirm",
+      "type": "question",
+      "titleKey": "steps.gp_entity_confirm.title",
+      "descriptionKey": "steps.gp_entity_confirm.description",
+      "visibilityRules": {
+        "logic": "AND",
+        "conditions": [{ "field": "hiringIntent", "op": "eq", "value": "global_payroll" }]
+      },
+      "fields": [
+        {
+          "id": "hasLocalEntity",
+          "type": "radio",
+          "labelKey": "fields.hasLocalEntity.label",
+          "required": true,
+          "options": [
+            { "value": "yes", "labelKey": "common.yes" },
+            { "value": "no", "labelKey": "common.no" }
+          ]
+        },
+        {
+          "id": "payrollCountry",
+          "type": "country",
+          "labelKey": "fields.payrollCountry.label",
+          "required": true
+        }
+      ],
+      "defaultNextStepId": "billing_setup"
+    },
+    {
+      "id": "peo_state_select",
+      "type": "question",
+      "titleKey": "steps.peo_state_select.title",
+      "descriptionKey": "steps.peo_state_select.description",
+      "visibilityRules": {
+        "logic": "AND",
+        "conditions": [{ "field": "hiringIntent", "op": "eq", "value": "us_peo" }]
+      },
+      "fields": [
+        {
+          "id": "usState",
+          "type": "select",
+          "labelKey": "fields.usState.label",
+          "required": true,
+          "options": [
+            { "value": "CA", "labelKey": "fields.usState.options.CA" },
+            { "value": "NY", "labelKey": "fields.usState.options.NY" },
+            { "value": "TX", "labelKey": "fields.usState.options.TX" },
+            { "value": "FL", "labelKey": "fields.usState.options.FL" },
+            { "value": "WA", "labelKey": "fields.usState.options.WA" },
+            { "value": "other", "labelKey": "fields.usState.options.other" }
+          ]
+        },
+        {
+          "id": "peoHeadcount",
+          "type": "text",
+          "labelKey": "fields.peoHeadcount.label",
+          "placeholderKey": "fields.peoHeadcount.placeholder",
+          "required": false
+        }
+      ],
+      "defaultNextStepId": "billing_setup"
+    },
+    {
+      "id": "billing_setup",
+      "type": "question",
+      "titleKey": "steps.billing_setup.title",
+      "descriptionKey": "steps.billing_setup.description",
+      "fields": [
+        {
+          "id": "billingMethod",
+          "type": "radio",
+          "labelKey": "fields.billingMethod.label",
+          "required": true,
+          "options": [
+            { "value": "card", "labelKey": "fields.billingMethod.options.card" },
+            { "value": "bank_transfer", "labelKey": "fields.billingMethod.options.bank_transfer" },
+            { "value": "invoice", "labelKey": "fields.billingMethod.options.invoice" }
+          ]
+        }
+      ],
+      "defaultNextStepId": "admin_info"
+    },
+    {
+      "id": "admin_info",
+      "type": "question",
+      "titleKey": "steps.admin_info.title",
+      "descriptionKey": "steps.admin_info.description",
+      "fields": [
+        {
+          "id": "adminFirstName",
+          "type": "text",
+          "labelKey": "fields.adminFirstName.label",
+          "required": true
+        },
+        {
+          "id": "adminLastName",
+          "type": "text",
+          "labelKey": "fields.adminLastName.label",
+          "required": true
+        },
+        {
+          "id": "adminTitle",
+          "type": "text",
+          "labelKey": "fields.adminTitle.label",
+          "required": false
+        }
+      ],
+      "defaultNextStepId": "review"
+    },
+    {
+      "id": "review",
+      "type": "review",
+      "titleKey": "steps.review.title",
+      "descriptionKey": "steps.review.description",
+      "fields": [],
+      "defaultNextStepId": "complete"
+    },
+    {
+      "id": "complete",
+      "type": "complete",
+      "titleKey": "steps.biz_complete.title",
+      "descriptionKey": "steps.biz_complete.description",
+      "fields": [],
+      "defaultNextStepId": null
+    }
+  ]
+}

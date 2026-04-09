@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "LeXdeEwwQ1c1faAQBcVMn"
+uri = "file://artifacts/mobile/assets/images/icon.png"
+type = "image"
+title = "globalhr mobile icon"

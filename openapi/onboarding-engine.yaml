@@ -1,0 +1,294 @@
+openapi: 3.1.0
+info:
+  title: Onboarding Engine Service
+  version: 1.0.0
+  description: |
+    Config-driven, state-machine onboarding engine. Supports versioned flow configs,
+    country/entity branching via a rules engine, and produces step-by-step sessions
+    for both individual and business onboarding journeys.
+servers:
+  - url: /api/onboarding-engine
+    description: Onboarding Engine API path
+tags:
+  - name: flows
+    description: Flow config discovery
+  - name: sessions
+    description: Onboarding session state machine
+
+paths:
+  /flows:
+    get:
+      operationId: listFlows
+      tags: [flows]
+      summary: List all available onboarding flows
+      responses:
+        "200":
+          description: Available flows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FlowSummary"
+
+  /flows/{flowId}:
+    get:
+      operationId: getFlow
+      tags: [flows]
+      summary: Get full flow config
+      parameters:
+        - name: flowId
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [individual, business]
+        - name: version
+          in: query
+          schema:
+            type: string
+            default: v1
+      responses:
+        "200":
+          description: Flow config
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlowConfig"
+        "404":
+          description: Flow not found
+
+  /sessions:
+    post:
+      operationId: createSession
+      tags: [sessions]
+      summary: Start a new onboarding session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSessionRequest"
+      responses:
+        "201":
+          description: Session created with first step
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionWithStep"
+
+  /sessions/{id}:
+    get:
+      operationId: getSession
+      tags: [sessions]
+      summary: Get current session state and current step
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Session state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionWithStep"
+        "404":
+          description: Session not found
+
+  /sessions/{id}/answer:
+    post:
+      operationId: submitAnswer
+      tags: [sessions]
+      summary: Submit answers for the current step and advance to the next
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitAnswerRequest"
+      responses:
+        "200":
+          description: Next step or completion
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitAnswerResponse"
+        "400":
+          description: Validation error
+        "404":
+          description: Session not found
+
+  /sessions/{id}/back:
+    post:
+      operationId: goBack
+      tags: [sessions]
+      summary: Navigate back to the previous step
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Previous step
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionWithStep"
+
+components:
+  schemas:
+    FlowSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        version:
+          type: string
+        titleKey:
+          type: string
+
+    FlowConfig:
+      type: object
+      properties:
+        id:
+          type: string
+        version:
+          type: string
+        titleKey:
+          type: string
+        descriptionKey:
+          type: string
+        steps:
+          type: array
+          items:
+            $ref: "#/components/schemas/Step"
+
+    Step:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [info, question, document_upload, verification, review, complete]
+        titleKey:
+          type: string
+        descriptionKey:
+          type: string
+          nullable: true
+        fields:
+          type: array
+          items:
+            $ref: "#/components/schemas/FieldDef"
+
+    FieldDef:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        labelKey:
+          type: string
+        required:
+          type: boolean
+        options:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+              labelKey:
+                type: string
+
+    CreateSessionRequest:
+      type: object
+      required: [flowId]
+      properties:
+        flowId:
+          type: string
+          enum: [individual, business]
+        flowVersion:
+          type: string
+          default: v1
+        userId:
+          type: integer
+          nullable: true
+
+    SessionWithStep:
+      type: object
+      properties:
+        session:
+          $ref: "#/components/schemas/SessionState"
+        currentStep:
+          $ref: "#/components/schemas/StepResult"
+
+    SessionState:
+      type: object
+      properties:
+        id:
+          type: integer
+        flowId:
+          type: string
+        flowVersion:
+          type: string
+        currentStepId:
+          type: string
+        answers:
+          type: object
+        status:
+          type: string
+          enum: [in_progress, completed, abandoned]
+
+    StepResult:
+      type: object
+      properties:
+        stepId:
+          type: string
+        step:
+          $ref: "#/components/schemas/Step"
+        isFirst:
+          type: boolean
+        isLast:
+          type: boolean
+        previousStepId:
+          type: string
+          nullable: true
+        nextStepId:
+          type: string
+          nullable: true
+        progress:
+          type: integer
+          description: Completion percentage (0-100)
+
+    SubmitAnswerRequest:
+      type: object
+      required: [answers]
+      properties:
+        answers:
+          type: object
+          description: Map of fieldId to value for the current step
+
+    SubmitAnswerResponse:
+      type: object
+      properties:
+        nextStep:
+          $ref: "#/components/schemas/StepResult"
+          nullable: true
+        isComplete:
+          type: boolean
+        session:
+          $ref: "#/components/schemas/SessionState"

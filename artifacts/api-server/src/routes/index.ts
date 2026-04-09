@@ -8,9 +8,13 @@ import complianceRouter from "./compliance";
 import onboardingRouter from "./onboarding";
 import notificationsRouter from "./notifications";
 import dashboardRouter from "./dashboard";
+import authRouter from "./auth";
+import onboardingEngineRouter from "./onboarding-engine";
 
 const router: IRouter = Router();
 
+router.use(authRouter);
+router.use(onboardingEngineRouter);
 router.use(healthRouter);
 router.use(organizationsRouter);
 router.use(workersRouter);

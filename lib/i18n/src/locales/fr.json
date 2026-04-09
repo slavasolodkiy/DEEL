@@ -1,0 +1,258 @@
+{
+  "common": {
+    "yes": "Oui",
+    "no": "Non",
+    "next": "Continuer",
+    "back": "Retour",
+    "submit": "Soumettre",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue. Veuillez réessayer.",
+    "required": "Ce champ est obligatoire.",
+    "step": "Étape {{current}} sur {{total}}",
+    "progress": "{{percent}}% complété"
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion à votre compte",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "vous@entreprise.com",
+      "passwordLabel": "Mot de passe",
+      "passwordPlaceholder": "••••••••",
+      "submitButton": "Se connecter",
+      "forgotPassword": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
+      "signUp": "S'inscrire",
+      "orContinueWith": "Ou continuer avec",
+      "continueWithGoogle": "Continuer avec Google",
+      "continueWithSSO": "Continuer avec SSO"
+    },
+    "register": {
+      "title": "Créer votre compte",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "vous@entreprise.com",
+      "passwordLabel": "Créer un mot de passe",
+      "passwordPlaceholder": "8 caractères minimum",
+      "accountTypeLabel": "Je suis...",
+      "accountTypeIndividual": "Travailleur / Contractant",
+      "accountTypeBusiness": "Employeur / Entreprise",
+      "submitButton": "Créer un compte",
+      "alreadyHaveAccount": "Vous avez déjà un compte ?",
+      "signIn": "Se connecter",
+      "termsNotice": "En vous inscrivant, vous acceptez nos Conditions d'utilisation et notre Politique de confidentialité."
+    }
+  },
+  "flows": {
+    "individual": {
+      "title": "Intégration travailleur",
+      "description": "Configurez votre profil pour recevoir des paiements dans le monde entier en toute conformité."
+    },
+    "business": {
+      "title": "Intégration employeur",
+      "description": "Configurez votre organisation pour recruter et payer votre équipe mondiale."
+    }
+  },
+  "steps": {
+    "welcome": {
+      "title": "Bienvenue sur la plateforme",
+      "description": "Configurons votre accès pour recevoir des paiements à l'international. Cela prend environ 10 minutes."
+    },
+    "personal_info": {
+      "title": "Vos informations personnelles",
+      "description": "Dites-nous en plus sur vous. Ces informations sont utilisées pour vos contrats et formulaires fiscaux."
+    },
+    "country_select": {
+      "title": "Où êtes-vous basé(e) ?",
+      "description": "Votre pays de résidence détermine le modèle de contrat, les formulaires fiscaux et les options de paiement."
+    },
+    "entity_type": {
+      "title": "Comment allez-vous travailler ?",
+      "description": "Indiquez si vous travaillerez en tant que particulier ou via une société enregistrée."
+    },
+    "company_details": {
+      "title": "Informations sur votre société",
+      "description": "Fournissez les informations de votre société pour les contrats et la facturation."
+    },
+    "contract_type": {
+      "title": "Choisissez votre type de contrat",
+      "description": "Sélectionnez comment vous souhaitez structurer votre travail et vos paiements."
+    },
+    "withdrawal_method": {
+      "title": "Comment souhaitez-vous être payé(e) ?",
+      "description": "Choisissez votre méthode de retrait préférée. Vous pourrez la modifier ultérieurement."
+    },
+    "tax_info": {
+      "title": "Informations fiscales",
+      "description": "Vos informations fiscales nous aident à générer les formulaires de retenue appropriés."
+    },
+    "gdpr_consent": {
+      "title": "Préférences en matière de confidentialité",
+      "description": "En tant que résident de l'UE, nous avons besoin de votre consentement pour traiter certaines données."
+    },
+    "document_upload": {
+      "title": "Téléchargez vos pièces d'identité",
+      "description": "Une pièce d'identité officielle est requise pour vérifier votre identité et débloquer les retraits."
+    },
+    "kyc_verification": {
+      "title": "Vérification d'identité",
+      "description": "Nous vérifierons votre identité automatiquement. Cela ne prend généralement que quelques minutes."
+    },
+    "review": {
+      "title": "Vérifiez vos informations",
+      "description": "Assurez-vous que tout est correct avant de soumettre."
+    },
+    "complete": {
+      "title": "Vous êtes prêt(e) !",
+      "description": "Bienvenue sur la plateforme. Votre compte est prêt à être utilisé."
+    },
+    "biz_welcome": {
+      "title": "Bienvenue sur GlobalHR",
+      "description": "Configurons votre organisation pour recruter et payer votre équipe mondiale en conformité."
+    },
+    "biz_complete": {
+      "title": "Votre organisation est prête !",
+      "description": "Vous pouvez désormais intégrer les membres de votre équipe et lancer les paies."
+    },
+    "company_info": {
+      "title": "Parlez-nous de votre entreprise",
+      "description": "Ces informations figureront sur les contrats de travail et documents officiels."
+    },
+    "hq_country": {
+      "title": "Où se trouve le siège de votre entreprise ?",
+      "description": "Le pays du siège détermine la devise de facturation et l'entité légale pour les accords employeur."
+    },
+    "hiring_intent": {
+      "title": "Que souhaitez-vous faire ?",
+      "description": "Choisissez la manière principale dont vous souhaitez recruter et payer votre équipe mondiale."
+    },
+    "eor_worker_country": {
+      "title": "Dans quel pays allez-vous embaucher votre premier employé ?",
+      "description": "Nous préparerons un devis d'embauche pour ce pays."
+    },
+    "eor_quote": {
+      "title": "Votre devis d'embauche",
+      "description": "Voici le détail des coûts pour employer quelqu'un dans le pays sélectionné."
+    },
+    "contractor_details": {
+      "title": "Informations sur le contractant",
+      "description": "Dites-nous à propos du contractant avec lequel vous souhaitez travailler."
+    },
+    "gp_entity_confirm": {
+      "title": "Confirmez votre entité locale",
+      "description": "La paie mondiale requiert que vous ayez une entité légale enregistrée dans le pays de paie."
+    },
+    "peo_state_select": {
+      "title": "Sélectionnez l'État de l'employé",
+      "description": "Nous prenons en charge les employés dans les 50 États américains."
+    },
+    "billing_setup": {
+      "title": "Configurer la facturation",
+      "description": "Choisissez comment vous paierez pour nos services."
+    },
+    "admin_info": {
+      "title": "Administrateur du compte",
+      "description": "Confirmez les informations de l'administrateur principal de ce compte."
+    }
+  },
+  "fields": {
+    "firstName": { "label": "Prénom", "placeholder": "Sophie" },
+    "lastName": { "label": "Nom de famille", "placeholder": "Martin" },
+    "dateOfBirth": { "label": "Date de naissance" },
+    "phone": { "label": "Numéro de téléphone", "placeholder": "+33 6 00 00 00 00" },
+    "country": { "label": "Pays de résidence" },
+    "hqCountry": { "label": "Pays du siège" },
+    "workerCountry": { "label": "Pays du travailleur" },
+    "payrollCountry": { "label": "Pays de paie" },
+    "entityType": {
+      "label": "Je travaillerai en tant que",
+      "options": { "individual": "Particulier (moi-même)", "company": "Société enregistrée" }
+    },
+    "companyName": { "label": "Nom de la société" },
+    "legalName": { "label": "Dénomination légale / enregistrée" },
+    "registrationNumber": { "label": "Numéro d'immatriculation" },
+    "contractType": {
+      "label": "Type de contrat",
+      "options": {
+        "fixed_rate": "Tarif fixe (mensuel)",
+        "pay_as_you_go": "À l'heure (pay as you go)",
+        "milestone": "Par jalon",
+        "time_materials": "Régie (temps et matériaux)"
+      }
+    },
+    "withdrawalMethod": {
+      "label": "Méthode de retrait",
+      "options": { "bank_transfer": "Virement bancaire", "wise": "Wise", "payoneer": "Payoneer" }
+    },
+    "currency": { "label": "Devise préférée" },
+    "taxFormType": {
+      "label": "Type de formulaire fiscal",
+      "options": { "w9": "W-9 (personnes américaines)", "w8ben": "W-8BEN (non-américains)", "local": "Formulaire fiscal local" }
+    },
+    "taxId": { "label": "Numéro d'identification fiscale", "placeholder": "Facultatif" },
+    "gdprConsent": { "label": "Je consens au traitement de mes données personnelles tel que décrit dans la Politique de confidentialité." },
+    "marketingConsent": { "label": "Je souhaite recevoir des actualités et mises à jour produit." },
+    "governmentId": { "label": "Pièce d'identité officielle (passeport, carte nationale d'identité ou permis de conduire)" },
+    "proofOfAddress": { "label": "Justificatif de domicile (facultatif)" },
+    "kycStatus": { "label": "Statut de vérification" },
+    "industry": {
+      "label": "Secteur d'activité",
+      "options": { "technology": "Technologie", "finance": "Finance", "healthcare": "Santé", "retail": "Commerce de détail", "manufacturing": "Industrie", "other": "Autre" }
+    },
+    "companySize": {
+      "label": "Taille de l'entreprise",
+      "options": { "micro": "1–10 employés", "small": "11–50 employés", "medium": "51–200 employés", "large": "201–1 000 employés", "enterprise": "Plus de 1 000 employés" }
+    },
+    "hiringIntent": {
+      "label": "Que souhaitez-vous faire ?",
+      "options": {
+        "eor": "Embaucher des employés à l'international (Employeur de référence)",
+        "contractor": "Recruter des contractants internationaux",
+        "global_payroll": "Gérer la paie dans des pays où j'ai des entités",
+        "us_peo": "Embaucher des employés aux États-Unis (PEO)"
+      }
+    },
+    "grossSalary": { "label": "Salaire brut mensuel estimé", "placeholder": "ex. 5000" },
+    "salaryCurrency": { "label": "Devise du salaire" },
+    "contractorEntityType": { "label": "Type de contractant" },
+    "hasLocalEntity": { "label": "Avez-vous une entité légale enregistrée dans ce pays ?" },
+    "usState": {
+      "label": "État de l'employé",
+      "options": { "CA": "Californie", "NY": "New York", "TX": "Texas", "FL": "Floride", "WA": "Washington", "other": "Autre État" }
+    },
+    "peoHeadcount": { "label": "Nombre approximatif d'employés", "placeholder": "ex. 5" },
+    "billingMethod": {
+      "label": "Méthode de facturation",
+      "options": { "card": "Carte de crédit/débit", "bank_transfer": "Virement bancaire", "invoice": "Facture (30 jours net)" }
+    },
+    "adminFirstName": { "label": "Prénom" },
+    "adminLastName": { "label": "Nom" },
+    "adminTitle": { "label": "Poste (facultatif)" }
+  },
+  "kyc": {
+    "status": { "pending": "Vérification en attente", "in_progress": "Vérification en cours", "approved": "Identité vérifiée", "failed": "Vérification échouée" },
+    "provider": "Propulsé par notre partenaire de vérification d'identité",
+    "startButton": "Démarrer la vérification",
+    "manualFallback": "Vous avez des difficultés ? Demandez une révision manuelle",
+    "manual_label": "Révision manuelle demandée (1 jour ouvré)"
+  },
+  "review": {
+    "personalInfo": "Informations personnelles",
+    "entityInfo": "Informations sur l'entité",
+    "contractInfo": "Préférences de contrat",
+    "paymentInfo": "Méthode de paiement",
+    "taxInfo": "Informations fiscales",
+    "editSection": "Modifier",
+    "confirmSubmit": "Soumettre la demande"
+  },
+  "errors": {
+    "emailInUse": "Cette adresse e-mail est déjà enregistrée.",
+    "invalidCredentials": "E-mail ou mot de passe incorrect.",
+    "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
+    "networkError": "Erreur réseau. Vérifiez votre connexion.",
+    "uploadFailed": "Échec du téléversement. Veuillez réessayer.",
+    "kycFailed": "La vérification d'identité a échoué. Vérifiez vos documents et réessayez.",
+    "stepNotFound": "Étape introuvable. Veuillez redémarrer l'intégration.",
+    "flowNotFound": "Parcours d'intégration introuvable."
+  }
+}

@@ -1,0 +1,258 @@
+{
+  "common": {
+    "yes": "Sí",
+    "no": "No",
+    "next": "Continuar",
+    "back": "Atrás",
+    "submit": "Enviar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "loading": "Cargando...",
+    "error": "Ha ocurrido un error. Inténtalo de nuevo.",
+    "required": "Este campo es obligatorio.",
+    "step": "Paso {{current}} de {{total}}",
+    "progress": "{{percent}}% completado"
+  },
+  "auth": {
+    "login": {
+      "title": "Inicia sesión en tu cuenta",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "tú@empresa.com",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "••••••••",
+      "submitButton": "Iniciar sesión",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿No tienes cuenta?",
+      "signUp": "Regístrate",
+      "orContinueWith": "O continúa con",
+      "continueWithGoogle": "Continuar con Google",
+      "continueWithSSO": "Continuar con SSO"
+    },
+    "register": {
+      "title": "Crea tu cuenta",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "tú@empresa.com",
+      "passwordLabel": "Crea una contraseña",
+      "passwordPlaceholder": "Mínimo 8 caracteres",
+      "accountTypeLabel": "Soy...",
+      "accountTypeIndividual": "Trabajador / Contratista",
+      "accountTypeBusiness": "Empleador / Empresa",
+      "submitButton": "Crear cuenta",
+      "alreadyHaveAccount": "¿Ya tienes cuenta?",
+      "signIn": "Iniciar sesión",
+      "termsNotice": "Al registrarte, aceptas nuestros Términos de Servicio y Política de Privacidad."
+    }
+  },
+  "flows": {
+    "individual": {
+      "title": "Registro de trabajador",
+      "description": "Configura tu perfil para recibir pagos de forma global y conforme a las normativas locales."
+    },
+    "business": {
+      "title": "Registro de empleador",
+      "description": "Configura tu organización para contratar y pagar a tu equipo global."
+    }
+  },
+  "steps": {
+    "welcome": {
+      "title": "Bienvenido a la plataforma",
+      "description": "Vamos a configurarte para recibir pagos a nivel global. Esto tarda unos 10 minutos."
+    },
+    "personal_info": {
+      "title": "Tus datos personales",
+      "description": "Cuéntanos un poco sobre ti. Esta información se usa en tus contratos y formularios fiscales."
+    },
+    "country_select": {
+      "title": "¿Dónde estás ubicado?",
+      "description": "Tu país de residencia determina la plantilla de contrato, los formularios fiscales y las opciones de pago."
+    },
+    "entity_type": {
+      "title": "¿Cómo trabajarás?",
+      "description": "Selecciona si trabajarás como persona física o a través de una empresa registrada."
+    },
+    "company_details": {
+      "title": "Datos de tu empresa",
+      "description": "Proporciona la información de tu empresa registrada para contratos y facturación."
+    },
+    "contract_type": {
+      "title": "Elige tu tipo de contrato",
+      "description": "Selecciona cómo prefieres estructurar tu trabajo y pagos."
+    },
+    "withdrawal_method": {
+      "title": "¿Cómo deseas recibir tus pagos?",
+      "description": "Elige tu método de cobro preferido. Podrás cambiarlo más adelante."
+    },
+    "tax_info": {
+      "title": "Información fiscal",
+      "description": "Tus datos fiscales nos ayudan a generar los formularios de retención correctos."
+    },
+    "gdpr_consent": {
+      "title": "Preferencias de privacidad",
+      "description": "Como residente en la UE, necesitamos tu consentimiento para procesar ciertos datos."
+    },
+    "document_upload": {
+      "title": "Sube tus documentos de identidad",
+      "description": "Se requiere un documento de identidad oficial para verificar tu identidad y desbloquear los cobros."
+    },
+    "kyc_verification": {
+      "title": "Verificación de identidad",
+      "description": "Verificaremos tu identidad automáticamente. Normalmente tarda solo unos minutos."
+    },
+    "review": {
+      "title": "Revisa tu información",
+      "description": "Comprueba que todo sea correcto antes de enviar."
+    },
+    "complete": {
+      "title": "¡Todo listo!",
+      "description": "Bienvenido a la plataforma. Tu cuenta está lista para usar."
+    },
+    "biz_welcome": {
+      "title": "Bienvenido a GlobalHR",
+      "description": "Configuremos tu organización para contratar y pagar a tu equipo global de forma conforme."
+    },
+    "biz_complete": {
+      "title": "¡Tu organización está lista!",
+      "description": "Ya puedes incorporar a los miembros de tu equipo y ejecutar nóminas."
+    },
+    "company_info": {
+      "title": "Cuéntanos sobre tu empresa",
+      "description": "Esta información aparecerá en los contratos de empleo y documentos oficiales."
+    },
+    "hq_country": {
+      "title": "¿Dónde tiene sede tu empresa?",
+      "description": "El país de sede determina la moneda de facturación y la entidad legal para los acuerdos de empleador."
+    },
+    "hiring_intent": {
+      "title": "¿Qué deseas hacer?",
+      "description": "Elige la forma principal en que quieres contratar y pagar a tu equipo global."
+    },
+    "eor_worker_country": {
+      "title": "¿Dónde contratarás a tu primer empleado?",
+      "description": "Prepararemos una cotización de empleo para ese país."
+    },
+    "eor_quote": {
+      "title": "Tu cotización de empleo",
+      "description": "Aquí tienes el desglose de costes para emplear a alguien en el país seleccionado."
+    },
+    "contractor_details": {
+      "title": "Datos del contratista",
+      "description": "Cuéntanos sobre el contratista con el que quieres trabajar."
+    },
+    "gp_entity_confirm": {
+      "title": "Confirma tu entidad local",
+      "description": "La Nómina Global requiere que tengas una entidad legal registrada en el país de nómina."
+    },
+    "peo_state_select": {
+      "title": "Selecciona el estado del empleado",
+      "description": "Damos soporte a empleados en los 50 estados de EE. UU."
+    },
+    "billing_setup": {
+      "title": "Configura la facturación",
+      "description": "Elige cómo pagarás por nuestros servicios."
+    },
+    "admin_info": {
+      "title": "Administrador de la cuenta",
+      "description": "Confirma los datos del administrador principal de esta cuenta."
+    }
+  },
+  "fields": {
+    "firstName": { "label": "Nombre", "placeholder": "Ana" },
+    "lastName": { "label": "Apellido(s)", "placeholder": "García" },
+    "dateOfBirth": { "label": "Fecha de nacimiento" },
+    "phone": { "label": "Número de teléfono", "placeholder": "+34 600 000 000" },
+    "country": { "label": "País de residencia" },
+    "hqCountry": { "label": "País de sede" },
+    "workerCountry": { "label": "País del trabajador" },
+    "payrollCountry": { "label": "País de nómina" },
+    "entityType": {
+      "label": "Trabajaré como",
+      "options": { "individual": "Persona física (yo mismo)", "company": "Empresa registrada" }
+    },
+    "companyName": { "label": "Nombre de la empresa" },
+    "legalName": { "label": "Nombre legal / registrado" },
+    "registrationNumber": { "label": "Número de registro de empresa" },
+    "contractType": {
+      "label": "Tipo de contrato",
+      "options": {
+        "fixed_rate": "Tarifa fija (mensual)",
+        "pay_as_you_go": "Por horas (pay as you go)",
+        "milestone": "Por hitos",
+        "time_materials": "Tiempo y materiales"
+      }
+    },
+    "withdrawalMethod": {
+      "label": "Método de cobro",
+      "options": { "bank_transfer": "Transferencia bancaria", "wise": "Wise", "payoneer": "Payoneer" }
+    },
+    "currency": { "label": "Moneda preferida" },
+    "taxFormType": {
+      "label": "Tipo de formulario fiscal",
+      "options": { "w9": "W-9 (personas de EE. UU.)", "w8ben": "W-8BEN (personas no de EE. UU.)", "local": "Formulario fiscal local" }
+    },
+    "taxId": { "label": "Número de identificación fiscal", "placeholder": "Opcional" },
+    "gdprConsent": { "label": "Consiento el tratamiento de mis datos personales tal como se describe en la Política de Privacidad." },
+    "marketingConsent": { "label": "Me gustaría recibir actualizaciones del producto y noticias." },
+    "governmentId": { "label": "Documento de identidad oficial (pasaporte, DNI o permiso de conducir)" },
+    "proofOfAddress": { "label": "Justificante de domicilio (opcional)" },
+    "kycStatus": { "label": "Estado de verificación" },
+    "industry": {
+      "label": "Sector",
+      "options": { "technology": "Tecnología", "finance": "Finanzas", "healthcare": "Sanidad", "retail": "Comercio", "manufacturing": "Manufactura", "other": "Otro" }
+    },
+    "companySize": {
+      "label": "Tamaño de la empresa",
+      "options": { "micro": "1–10 empleados", "small": "11–50 empleados", "medium": "51–200 empleados", "large": "201–1.000 empleados", "enterprise": "Más de 1.000 empleados" }
+    },
+    "hiringIntent": {
+      "label": "¿Qué quieres hacer?",
+      "options": {
+        "eor": "Contratar empleados globalmente (Empleador de Registro)",
+        "contractor": "Contratar contratistas internacionales",
+        "global_payroll": "Gestionar nóminas en países donde tengo entidades",
+        "us_peo": "Contratar empleados en EE. UU. (PEO)"
+      }
+    },
+    "grossSalary": { "label": "Salario bruto mensual estimado", "placeholder": "p. ej. 5000" },
+    "salaryCurrency": { "label": "Moneda del salario" },
+    "contractorEntityType": { "label": "Tipo de contratista" },
+    "hasLocalEntity": { "label": "¿Tienes una entidad legal registrada en ese país?" },
+    "usState": {
+      "label": "Estado del empleado",
+      "options": { "CA": "California", "NY": "Nueva York", "TX": "Texas", "FL": "Florida", "WA": "Washington", "other": "Otro estado" }
+    },
+    "peoHeadcount": { "label": "Número aproximado de empleados", "placeholder": "p. ej. 5" },
+    "billingMethod": {
+      "label": "Método de facturación",
+      "options": { "card": "Tarjeta de crédito/débito", "bank_transfer": "Transferencia bancaria", "invoice": "Factura (30 días neto)" }
+    },
+    "adminFirstName": { "label": "Nombre" },
+    "adminLastName": { "label": "Apellido(s)" },
+    "adminTitle": { "label": "Cargo (opcional)" }
+  },
+  "kyc": {
+    "status": { "pending": "Verificación pendiente", "in_progress": "Verificación en curso", "approved": "Identidad verificada", "failed": "Verificación fallida" },
+    "provider": "Desarrollado con nuestro socio de verificación de identidad",
+    "startButton": "Iniciar verificación",
+    "manualFallback": "¿Tienes problemas? Solicita revisión manual",
+    "manual_label": "Revisión manual solicitada (1 día hábil)"
+  },
+  "review": {
+    "personalInfo": "Información personal",
+    "entityInfo": "Datos de la entidad",
+    "contractInfo": "Preferencias de contrato",
+    "paymentInfo": "Método de pago",
+    "taxInfo": "Datos fiscales",
+    "editSection": "Editar",
+    "confirmSubmit": "Enviar solicitud"
+  },
+  "errors": {
+    "emailInUse": "Esta dirección de correo ya está registrada.",
+    "invalidCredentials": "Correo o contraseña incorrectos.",
+    "sessionExpired": "Tu sesión ha expirado. Por favor, inicia sesión de nuevo.",
+    "networkError": "Error de red. Comprueba tu conexión.",
+    "uploadFailed": "Error al subir el archivo. Inténtalo de nuevo.",
+    "kycFailed": "La verificación de identidad ha fallado. Comprueba tus documentos e inténtalo de nuevo.",
+    "stepNotFound": "Paso no encontrado. Por favor, reinicia el proceso.",
+    "flowNotFound": "Flujo de incorporación no encontrado."
+  }
+}

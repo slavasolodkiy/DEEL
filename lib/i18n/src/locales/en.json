@@ -1,0 +1,356 @@
+{
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "next": "Continue",
+    "back": "Back",
+    "submit": "Submit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "error": "An error occurred. Please try again.",
+    "required": "This field is required.",
+    "step": "Step {{current}} of {{total}}",
+    "progress": "{{percent}}% complete"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in to your account",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "you@company.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••",
+      "submitButton": "Sign in",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "orContinueWith": "Or continue with",
+      "continueWithGoogle": "Continue with Google",
+      "continueWithSSO": "Continue with SSO"
+    },
+    "register": {
+      "title": "Create your account",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "you@company.com",
+      "passwordLabel": "Create password",
+      "passwordPlaceholder": "Min. 8 characters",
+      "accountTypeLabel": "I am a...",
+      "accountTypeIndividual": "Worker / Contractor",
+      "accountTypeBusiness": "Employer / Company",
+      "submitButton": "Create account",
+      "alreadyHaveAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "termsNotice": "By signing up, you agree to our Terms of Service and Privacy Policy."
+    }
+  },
+  "flows": {
+    "individual": {
+      "title": "Worker Onboarding",
+      "description": "Set up your profile so you can get paid compliantly anywhere in the world."
+    },
+    "business": {
+      "title": "Employer Onboarding",
+      "description": "Set up your organization to hire and pay your global team."
+    }
+  },
+  "steps": {
+    "welcome": {
+      "title": "Welcome to the platform",
+      "description": "Let's get you set up to receive payments globally. This takes about 10 minutes."
+    },
+    "personal_info": {
+      "title": "Your personal details",
+      "description": "Tell us a bit about yourself. This information is used for your contracts and tax forms."
+    },
+    "country_select": {
+      "title": "Where are you based?",
+      "description": "Your country of residence determines your contract template, tax forms, and payment options."
+    },
+    "entity_type": {
+      "title": "How will you work?",
+      "description": "Select whether you will work as an individual or through a registered company."
+    },
+    "company_details": {
+      "title": "Your company details",
+      "description": "Provide your registered company information for contracts and invoicing."
+    },
+    "contract_type": {
+      "title": "Choose your contract type",
+      "description": "Select how you prefer to structure your work and payments."
+    },
+    "withdrawal_method": {
+      "title": "How would you like to be paid?",
+      "description": "Choose your preferred withdrawal method. You can change this later."
+    },
+    "tax_info": {
+      "title": "Tax information",
+      "description": "Your tax details help us generate the correct withholding forms."
+    },
+    "gdpr_consent": {
+      "title": "Data privacy preferences",
+      "description": "As an EU resident, we need your consent to process certain data."
+    },
+    "document_upload": {
+      "title": "Upload your identity documents",
+      "description": "A government-issued ID is required to verify your identity and unlock withdrawals."
+    },
+    "kyc_verification": {
+      "title": "Identity verification",
+      "description": "We'll verify your identity automatically. This usually takes just a few minutes."
+    },
+    "review": {
+      "title": "Review your information",
+      "description": "Check that everything is correct before you submit."
+    },
+    "complete": {
+      "title": "You're all set!",
+      "description": "Welcome to the platform. Your account is ready to use."
+    },
+    "biz_welcome": {
+      "title": "Welcome to GlobalHR",
+      "description": "Let's set up your organization so you can hire and pay your global team compliantly."
+    },
+    "biz_complete": {
+      "title": "Your organization is ready!",
+      "description": "You can now start onboarding your team members and running payroll."
+    },
+    "company_info": {
+      "title": "Tell us about your company",
+      "description": "This information will appear on employment contracts and official documents."
+    },
+    "hq_country": {
+      "title": "Where is your company headquartered?",
+      "description": "Your HQ country determines billing currency and legal entity for employer agreements."
+    },
+    "hiring_intent": {
+      "title": "What would you like to do?",
+      "description": "Choose the primary way you want to hire and pay your global team."
+    },
+    "eor_worker_country": {
+      "title": "Where will you hire your first employee?",
+      "description": "We'll prepare an employment quote for that country."
+    },
+    "eor_quote": {
+      "title": "Your employment quote",
+      "description": "Here's a cost breakdown for employing someone in the selected country."
+    },
+    "contractor_details": {
+      "title": "Contractor details",
+      "description": "Tell us about the contractor you want to work with."
+    },
+    "gp_entity_confirm": {
+      "title": "Confirm your local entity",
+      "description": "Global Payroll requires you to have a registered legal entity in the payroll country."
+    },
+    "peo_state_select": {
+      "title": "Select employee state",
+      "description": "We support US employees in all 50 states."
+    },
+    "billing_setup": {
+      "title": "Set up billing",
+      "description": "Choose how you'll pay for our services."
+    },
+    "admin_info": {
+      "title": "Account administrator",
+      "description": "Confirm the details of the primary admin for this account."
+    }
+  },
+  "fields": {
+    "firstName": {
+      "label": "First name",
+      "placeholder": "Jane"
+    },
+    "lastName": {
+      "label": "Last name",
+      "placeholder": "Smith"
+    },
+    "dateOfBirth": {
+      "label": "Date of birth"
+    },
+    "phone": {
+      "label": "Phone number",
+      "placeholder": "+1 555 000 0000"
+    },
+    "country": {
+      "label": "Country of residence"
+    },
+    "hqCountry": {
+      "label": "Headquarters country"
+    },
+    "workerCountry": {
+      "label": "Worker's country"
+    },
+    "payrollCountry": {
+      "label": "Payroll country"
+    },
+    "entityType": {
+      "label": "Working as",
+      "options": {
+        "individual": "Individual (myself)",
+        "company": "A registered company"
+      }
+    },
+    "companyName": {
+      "label": "Company name"
+    },
+    "legalName": {
+      "label": "Legal / registered name"
+    },
+    "registrationNumber": {
+      "label": "Company registration number"
+    },
+    "contractType": {
+      "label": "Contract type",
+      "options": {
+        "fixed_rate": "Fixed rate (monthly)",
+        "pay_as_you_go": "Pay as you go (hourly)",
+        "milestone": "Milestone-based",
+        "time_materials": "Time & materials"
+      }
+    },
+    "withdrawalMethod": {
+      "label": "Withdrawal method",
+      "options": {
+        "bank_transfer": "Bank transfer",
+        "wise": "Wise",
+        "payoneer": "Payoneer"
+      }
+    },
+    "currency": {
+      "label": "Preferred currency"
+    },
+    "taxFormType": {
+      "label": "Tax form type",
+      "options": {
+        "w9": "W-9 (US persons)",
+        "w8ben": "W-8BEN (non-US individuals)",
+        "local": "Local tax form"
+      }
+    },
+    "taxId": {
+      "label": "Tax ID / EIN / SSN",
+      "placeholder": "Optional"
+    },
+    "gdprConsent": {
+      "label": "I consent to the processing of my personal data as described in the Privacy Policy."
+    },
+    "marketingConsent": {
+      "label": "I'd like to receive product updates and news."
+    },
+    "governmentId": {
+      "label": "Government-issued ID (passport, national ID, or driver's license)"
+    },
+    "proofOfAddress": {
+      "label": "Proof of address (optional — utility bill, bank statement)"
+    },
+    "kycStatus": {
+      "label": "Verification status"
+    },
+    "industry": {
+      "label": "Industry",
+      "options": {
+        "technology": "Technology",
+        "finance": "Finance",
+        "healthcare": "Healthcare",
+        "retail": "Retail",
+        "manufacturing": "Manufacturing",
+        "other": "Other"
+      }
+    },
+    "companySize": {
+      "label": "Company size",
+      "options": {
+        "micro": "1–10 employees",
+        "small": "11–50 employees",
+        "medium": "51–200 employees",
+        "large": "201–1,000 employees",
+        "enterprise": "1,000+ employees"
+      }
+    },
+    "hiringIntent": {
+      "label": "What do you want to do?",
+      "options": {
+        "eor": "Hire employees globally (Employer of Record)",
+        "contractor": "Hire contractors internationally",
+        "global_payroll": "Run payroll for employees in countries where I have entities",
+        "us_peo": "Hire US employees (PEO co-employment)"
+      }
+    },
+    "grossSalary": {
+      "label": "Estimated gross monthly salary",
+      "placeholder": "e.g. 5000"
+    },
+    "salaryCurrency": {
+      "label": "Salary currency"
+    },
+    "contractorEntityType": {
+      "label": "Contractor type"
+    },
+    "hasLocalEntity": {
+      "label": "Do you have a registered legal entity in that country?"
+    },
+    "usState": {
+      "label": "Employee state",
+      "options": {
+        "CA": "California",
+        "NY": "New York",
+        "TX": "Texas",
+        "FL": "Florida",
+        "WA": "Washington",
+        "other": "Other state"
+      }
+    },
+    "peoHeadcount": {
+      "label": "Approximate headcount",
+      "placeholder": "e.g. 5"
+    },
+    "billingMethod": {
+      "label": "Billing method",
+      "options": {
+        "card": "Credit / debit card",
+        "bank_transfer": "Bank transfer (ACH / wire)",
+        "invoice": "Invoice (net 30)"
+      }
+    },
+    "adminFirstName": {
+      "label": "First name"
+    },
+    "adminLastName": {
+      "label": "Last name"
+    },
+    "adminTitle": {
+      "label": "Job title (optional)"
+    }
+  },
+  "kyc": {
+    "status": {
+      "pending": "Verification pending",
+      "in_progress": "Verification in progress",
+      "approved": "Identity verified",
+      "failed": "Verification failed"
+    },
+    "provider": "Powered by our identity verification partner",
+    "startButton": "Start verification",
+    "manualFallback": "Having trouble? Request manual review",
+    "manual_label": "Manual review requested (1 business day)"
+  },
+  "review": {
+    "personalInfo": "Personal Information",
+    "entityInfo": "Entity Details",
+    "contractInfo": "Contract Preferences",
+    "paymentInfo": "Payment Method",
+    "taxInfo": "Tax Details",
+    "editSection": "Edit",
+    "confirmSubmit": "Submit application"
+  },
+  "errors": {
+    "emailInUse": "This email address is already registered.",
+    "invalidCredentials": "Incorrect email or password.",
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "networkError": "Network error. Please check your connection.",
+    "uploadFailed": "File upload failed. Please try again.",
+    "kycFailed": "Identity verification failed. Please check your documents and try again.",
+    "stepNotFound": "Step not found. Please restart onboarding.",
+    "flowNotFound": "Onboarding flow not found."
+  }
+}

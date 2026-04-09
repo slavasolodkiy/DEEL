@@ -1,0 +1,272 @@
+{
+  "id": "individual",
+  "version": "v1",
+  "titleKey": "flows.individual.title",
+  "descriptionKey": "flows.individual.description",
+  "steps": [
+    {
+      "id": "welcome",
+      "type": "info",
+      "titleKey": "steps.welcome.title",
+      "descriptionKey": "steps.welcome.description",
+      "fields": [],
+      "defaultNextStepId": "personal_info"
+    },
+    {
+      "id": "personal_info",
+      "type": "question",
+      "titleKey": "steps.personal_info.title",
+      "descriptionKey": "steps.personal_info.description",
+      "fields": [
+        {
+          "id": "firstName",
+          "type": "text",
+          "labelKey": "fields.firstName.label",
+          "placeholderKey": "fields.firstName.placeholder",
+          "required": true
+        },
+        {
+          "id": "lastName",
+          "type": "text",
+          "labelKey": "fields.lastName.label",
+          "placeholderKey": "fields.lastName.placeholder",
+          "required": true
+        },
+        {
+          "id": "dateOfBirth",
+          "type": "date",
+          "labelKey": "fields.dateOfBirth.label",
+          "required": true
+        },
+        {
+          "id": "phone",
+          "type": "tel",
+          "labelKey": "fields.phone.label",
+          "placeholderKey": "fields.phone.placeholder",
+          "required": true
+        }
+      ],
+      "defaultNextStepId": "country_select"
+    },
+    {
+      "id": "country_select",
+      "type": "question",
+      "titleKey": "steps.country_select.title",
+      "descriptionKey": "steps.country_select.description",
+      "fields": [
+        {
+          "id": "country",
+          "type": "country",
+          "labelKey": "fields.country.label",
+          "required": true
+        }
+      ],
+      "defaultNextStepId": "entity_type"
+    },
+    {
+      "id": "entity_type",
+      "type": "question",
+      "titleKey": "steps.entity_type.title",
+      "descriptionKey": "steps.entity_type.description",
+      "fields": [
+        {
+          "id": "entityType",
+          "type": "radio",
+          "labelKey": "fields.entityType.label",
+          "required": true,
+          "options": [
+            { "value": "individual", "labelKey": "fields.entityType.options.individual" },
+            { "value": "company", "labelKey": "fields.entityType.options.company" }
+          ]
+        }
+      ],
+      "nextRules": [
+        {
+          "logic": "AND",
+          "conditions": [{ "field": "entityType", "op": "eq", "value": "company" }],
+          "nextStepId": "company_details"
+        }
+      ],
+      "defaultNextStepId": "contract_type"
+    },
+    {
+      "id": "company_details",
+      "type": "question",
+      "titleKey": "steps.company_details.title",
+      "descriptionKey": "steps.company_details.description",
+      "visibilityRules": {
+        "logic": "AND",
+        "conditions": [{ "field": "entityType", "op": "eq", "value": "company" }]
+      },
+      "fields": [
+        {
+          "id": "companyName",
+          "type": "text",
+          "labelKey": "fields.companyName.label",
+          "required": true
+        },
+        {
+          "id": "registrationNumber",
+          "type": "text",
+          "labelKey": "fields.registrationNumber.label",
+          "required": true
+        }
+      ],
+      "defaultNextStepId": "contract_type"
+    },
+    {
+      "id": "contract_type",
+      "type": "question",
+      "titleKey": "steps.contract_type.title",
+      "descriptionKey": "steps.contract_type.description",
+      "fields": [
+        {
+          "id": "contractType",
+          "type": "radio",
+          "labelKey": "fields.contractType.label",
+          "required": true,
+          "options": [
+            { "value": "fixed_rate", "labelKey": "fields.contractType.options.fixed_rate" },
+            { "value": "pay_as_you_go", "labelKey": "fields.contractType.options.pay_as_you_go" },
+            { "value": "milestone", "labelKey": "fields.contractType.options.milestone" },
+            { "value": "time_materials", "labelKey": "fields.contractType.options.time_materials" }
+          ]
+        }
+      ],
+      "defaultNextStepId": "withdrawal_method"
+    },
+    {
+      "id": "withdrawal_method",
+      "type": "question",
+      "titleKey": "steps.withdrawal_method.title",
+      "descriptionKey": "steps.withdrawal_method.description",
+      "fields": [
+        {
+          "id": "withdrawalMethod",
+          "type": "radio",
+          "labelKey": "fields.withdrawalMethod.label",
+          "required": true,
+          "options": [
+            { "value": "bank_transfer", "labelKey": "fields.withdrawalMethod.options.bank_transfer" },
+            { "value": "wise", "labelKey": "fields.withdrawalMethod.options.wise" },
+            { "value": "payoneer", "labelKey": "fields.withdrawalMethod.options.payoneer" }
+          ]
+        },
+        {
+          "id": "currency",
+          "type": "currency",
+          "labelKey": "fields.currency.label",
+          "required": true
+        }
+      ],
+      "defaultNextStepId": "tax_info"
+    },
+    {
+      "id": "tax_info",
+      "type": "question",
+      "titleKey": "steps.tax_info.title",
+      "descriptionKey": "steps.tax_info.description",
+      "fields": [
+        {
+          "id": "taxFormType",
+          "type": "radio",
+          "labelKey": "fields.taxFormType.label",
+          "required": true,
+          "options": [
+            { "value": "w9", "labelKey": "fields.taxFormType.options.w9" },
+            { "value": "w8ben", "labelKey": "fields.taxFormType.options.w8ben" },
+            { "value": "local", "labelKey": "fields.taxFormType.options.local" }
+          ]
+        },
+        {
+          "id": "taxId",
+          "type": "text",
+          "labelKey": "fields.taxId.label",
+          "placeholderKey": "fields.taxId.placeholder",
+          "required": false
+        }
+      ],
+      "nextRules": [
+        {
+          "logic": "AND",
+          "conditions": [{ "field": "country", "op": "in", "value": ["EU_GDPR"] }],
+          "nextStepId": "gdpr_consent"
+        }
+      ],
+      "defaultNextStepId": "document_upload"
+    },
+    {
+      "id": "gdpr_consent",
+      "type": "question",
+      "titleKey": "steps.gdpr_consent.title",
+      "descriptionKey": "steps.gdpr_consent.description",
+      "fields": [
+        {
+          "id": "gdprConsent",
+          "type": "checkbox",
+          "labelKey": "fields.gdprConsent.label",
+          "required": true
+        },
+        {
+          "id": "marketingConsent",
+          "type": "checkbox",
+          "labelKey": "fields.marketingConsent.label",
+          "required": false
+        }
+      ],
+      "defaultNextStepId": "document_upload"
+    },
+    {
+      "id": "document_upload",
+      "type": "document_upload",
+      "titleKey": "steps.document_upload.title",
+      "descriptionKey": "steps.document_upload.description",
+      "fields": [
+        {
+          "id": "governmentId",
+          "type": "file",
+          "labelKey": "fields.governmentId.label",
+          "required": true
+        },
+        {
+          "id": "proofOfAddress",
+          "type": "file",
+          "labelKey": "fields.proofOfAddress.label",
+          "required": false
+        }
+      ],
+      "defaultNextStepId": "kyc_verification"
+    },
+    {
+      "id": "kyc_verification",
+      "type": "verification",
+      "titleKey": "steps.kyc_verification.title",
+      "descriptionKey": "steps.kyc_verification.description",
+      "fields": [
+        {
+          "id": "kycStatus",
+          "type": "text",
+          "labelKey": "fields.kycStatus.label",
+          "required": false
+        }
+      ],
+      "defaultNextStepId": "review"
+    },
+    {
+      "id": "review",
+      "type": "review",
+      "titleKey": "steps.review.title",
+      "descriptionKey": "steps.review.description",
+      "fields": [],
+      "defaultNextStepId": "complete"
+    },
+    {
+      "id": "complete",
+      "type": "complete",
+      "titleKey": "steps.complete.title",
+      "descriptionKey": "steps.complete.description",
+      "fields": [],
+      "defaultNextStepId": null
+    }
+  ]
+}

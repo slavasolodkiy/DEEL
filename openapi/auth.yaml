@@ -1,0 +1,382 @@
+openapi: 3.1.0
+info:
+  title: Auth Service
+  version: 1.0.0
+  description: |
+    Authentication service supporting email/password, OAuth/OIDC (mock), SSO/SAML (mock adapter),
+    and SCIM 2.0 (mock adapter for enterprise directory sync).
+servers:
+  - url: /api/auth
+    description: Auth API path
+tags:
+  - name: auth
+    description: Email/password authentication
+  - name: oauth
+    description: OAuth 2.0 / OIDC login flows
+  - name: sso
+    description: SAML/OIDC SSO for enterprise
+  - name: scim
+    description: SCIM 2.0 user provisioning adapter
+
+paths:
+  /register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: Account created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "409":
+          description: Email already in use
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Log in with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Invalidate the current session
+      security:
+        - BearerAuth: []
+      responses:
+        "204":
+          description: Logged out
+
+  /me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get the currently authenticated user
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+
+  /oauth/{provider}:
+    get:
+      operationId: oauthRedirect
+      tags: [oauth]
+      summary: Initiate OAuth login redirect (mock — returns a test token directly)
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [google, github]
+      responses:
+        "200":
+          description: OAuth mock token returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+
+  /sso/callback:
+    post:
+      operationId: ssoCallback
+      tags: [sso]
+      summary: SAML/OIDC SSO callback (mock adapter — accepts any payload, creates/fetches user)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SSOCallbackRequest"
+      responses:
+        "200":
+          description: SSO login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+
+  /scim/v2/Users:
+    get:
+      operationId: scimListUsers
+      tags: [scim]
+      summary: SCIM 2.0 — List users
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: filter
+          in: query
+          schema:
+            type: string
+        - name: startIndex
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: count
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: SCIM ListResponse
+          content:
+            application/scim+json:
+              schema:
+                $ref: "#/components/schemas/SCIMListResponse"
+    post:
+      operationId: scimCreateUser
+      tags: [scim]
+      summary: SCIM 2.0 — Provision a new user
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/scim+json:
+            schema:
+              $ref: "#/components/schemas/SCIMUser"
+      responses:
+        "201":
+          description: User provisioned
+          content:
+            application/scim+json:
+              schema:
+                $ref: "#/components/schemas/SCIMUser"
+
+  /scim/v2/Users/{id}:
+    get:
+      operationId: scimGetUser
+      tags: [scim]
+      summary: SCIM 2.0 — Get user by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: SCIM User
+          content:
+            application/scim+json:
+              schema:
+                $ref: "#/components/schemas/SCIMUser"
+    patch:
+      operationId: scimPatchUser
+      tags: [scim]
+      summary: SCIM 2.0 — Update user attributes
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/scim+json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: User updated
+          content:
+            application/scim+json:
+              schema:
+                $ref: "#/components/schemas/SCIMUser"
+    delete:
+      operationId: scimDeleteUser
+      tags: [scim]
+      summary: SCIM 2.0 — Deprovision user
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: User deprovisioned
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [email, password, role]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+        role:
+          type: string
+          enum: [individual, business]
+        locale:
+          type: string
+          enum: [en, es, fr]
+          default: en
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        role:
+          type: string
+        locale:
+          type: string
+        isVerified:
+          type: boolean
+
+    SSOCallbackRequest:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+        organizationId:
+          type: string
+        provider:
+          type: string
+
+    SCIMUser:
+      type: object
+      properties:
+        schemas:
+          type: array
+          items:
+            type: string
+        id:
+          type: string
+        userName:
+          type: string
+        name:
+          type: object
+          properties:
+            givenName:
+              type: string
+            familyName:
+              type: string
+        emails:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: string
+              primary:
+                type: boolean
+        active:
+          type: boolean
+
+    SCIMListResponse:
+      type: object
+      properties:
+        schemas:
+          type: array
+          items:
+            type: string
+        totalResults:
+          type: integer
+        startIndex:
+          type: integer
+        itemsPerPage:
+          type: integer
+        Resources:
+          type: array
+          items:
+            $ref: "#/components/schemas/SCIMUser"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
