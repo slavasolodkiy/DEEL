@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ChevronLeft } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -217,7 +218,7 @@ export function StepRenderer({ step, existingAnswers, onSubmit, onBack, submitti
                   >
                     Choose file
                   </Button>
-                  {values[field.id] && (
+                  {!!values[field.id] && (
                     <p className="text-xs text-primary font-medium">{String(values[field.id])}</p>
                   )}
                 </div>

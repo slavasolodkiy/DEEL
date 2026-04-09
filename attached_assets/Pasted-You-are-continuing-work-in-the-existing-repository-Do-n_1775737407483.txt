@@ -1,0 +1,51 @@
+You are continuing work in the existing repository. Do not rebuild from scratch.
+Use the current codebase as-is and implement the exact change list below.
+
+Authoritative change list:
+1) Security hardening (API auth + ownership)
+- Add a reusable auth middleware for bearer JWT verification.
+- Protect all non-public API routes.
+- Public routes allowed: /api/auth/register, /api/auth/login, /api/auth/oauth/:provider, /api/health.
+- SCIM routes must require authentication (or a dedicated SCIM token guard), matching OpenAPI security docs.
+- In onboarding-engine routes:
+  - Ignore userId from request body when creating sessions.
+  - Derive user identity from the validated auth token.
+  - Enforce session ownership checks on GET /sessions/:id, POST /sessions/:id/answer, POST /sessions/:id/back.
+  - Return 403 on owner mismatch.
+
+2) Onboarding data integrity
+- Implement server-side validation for required fields on the current step before advancing.
+- If required fields are missing/empty, return 400 with a structured validation error payload.
+- Add unit tests for required-field validation and branching behavior.
+
+3) Build reliability fixes
+- Fix TypeScript duplicate export conflicts in lib/api-zod/src/index.ts.
+- Ensure `pnpm -w run typecheck` passes.
+
+4) Cross-platform install/test support
+- Replace the Unix-only preinstall command with a cross-platform Node script.
+- Remove or refactor pnpm overrides that block Windows rollup binaries.
+- Ensure tests can run on both Linux and Windows environments.
+
+5) CI restoration
+- Add GitHub Actions workflow at .github/workflows/ci.yml:
+  - Trigger on push + pull_request
+  - Run install, lint, typecheck, test, build
+  - Use a matrix with ubuntu-latest and windows-latest
+
+6) Docs updates
+- Update docs/KNOWN_GAPS.md and docs/changelog.md with what changed.
+- Add a concise root README.md with local setup + verification commands.
+
+Execution rules:
+- Make atomic commits with clear messages.
+- Do not remove existing features unless required for correctness/security.
+- Keep changes minimal and targeted.
+- If a decision is ambiguous, choose the safest option and document it.
+
+Required output:
+1) Files changed (grouped by purpose)
+2) Exact commands executed and results
+3) Test evidence
+4) Commit hashes
+5) Remaining risks (if any)

@@ -34,8 +34,8 @@ export default function Payments() {
   const { toast } = useToast();
 
   const { data: payments, isLoading } = useListPayments(
-    statusFilter !== "all" ? { status: statusFilter as "pending" | "processing" | "completed" | "failed" } : {},
-    { query: { queryKey: getListPaymentsQueryKey(statusFilter !== "all" ? { status: statusFilter } : {}) } }
+    statusFilter !== "all" ? { status: statusFilter as "pending" | "processing" | "completed" | "failed" } : undefined,
+    { query: { queryKey: getListPaymentsQueryKey(statusFilter !== "all" ? { status: statusFilter as "pending" | "processing" | "completed" | "failed" } : undefined) } }
   );
 
   const approve = useApprovePayment({

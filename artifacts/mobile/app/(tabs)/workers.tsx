@@ -46,7 +46,7 @@ export default function WorkersScreen() {
   const insets = useSafeAreaInsets();
   const { token } = useAuth();
   const domain = process.env["EXPO_PUBLIC_DOMAIN"] ?? "";
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
   const [search, setSearch] = useState("");
 
   const topPad = Platform.OS === "web" ? 67 : insets.top;

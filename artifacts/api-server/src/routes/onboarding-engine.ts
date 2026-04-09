@@ -3,6 +3,7 @@ import { db } from "@workspace/db";
 import { onboardingSessionsTable, onboardingStepLogTable } from "@workspace/db/schema";
 import { getEngine, listFlows } from "@workspace/onboarding-engine";
 import { eq } from "drizzle-orm";
+import { optionalAuth } from "../middlewares/auth";
 
 const router = Router();
 
@@ -24,11 +25,10 @@ router.get("/onboarding-engine/flows/:flowId", (req, res): void => {
 });
 
 // POST /api/onboarding-engine/sessions
-router.post("/onboarding-engine/sessions", async (req, res): Promise<void> => {
-  const { flowId, flowVersion = "v1", userId } = req.body as {
+router.post("/onboarding-engine/sessions", optionalAuth, async (req, res): Promise<void> => {
+  const { flowId, flowVersion = "v1" } = req.body as {
     flowId?: string;
     flowVersion?: string;
-    userId?: number | null;
   };
 
   if (!flowId) {
@@ -47,7 +47,7 @@ router.post("/onboarding-engine/sessions", async (req, res): Promise<void> => {
   const [record] = await db
     .insert(onboardingSessionsTable)
     .values({
-      userId: userId ?? null,
+      userId: req.user?.id ?? null,
       flowId,
       flowVersion,
       currentStepId: engine.getFirstStep().id,
@@ -63,7 +63,7 @@ router.post("/onboarding-engine/sessions", async (req, res): Promise<void> => {
 });
 
 // GET /api/onboarding-engine/sessions/:id
-router.get("/onboarding-engine/sessions/:id", async (req, res): Promise<void> => {
+router.get("/onboarding-engine/sessions/:id", optionalAuth, async (req, res): Promise<void> => {
   const id = Number(req.params["id"]);
 
   const [record] = await db
@@ -74,6 +74,11 @@ router.get("/onboarding-engine/sessions/:id", async (req, res): Promise<void> =>
 
   if (!record) {
     res.status(404).json({ error: "not_found", message: "Session not found" });
+    return;
+  }
+
+  if (record.userId !== null && req.user?.id !== record.userId) {
+    res.status(403).json({ error: "forbidden", message: "You do not own this session" });
     return;
   }
 
@@ -95,7 +100,7 @@ router.get("/onboarding-engine/sessions/:id", async (req, res): Promise<void> =>
 });
 
 // POST /api/onboarding-engine/sessions/:id/answer
-router.post("/onboarding-engine/sessions/:id/answer", async (req, res): Promise<void> => {
+router.post("/onboarding-engine/sessions/:id/answer", optionalAuth, async (req, res): Promise<void> => {
   const id = Number(req.params["id"]);
   const { answers: stepAnswers = {} } = req.body as { answers?: Record<string, unknown> };
 
@@ -110,6 +115,11 @@ router.post("/onboarding-engine/sessions/:id/answer", async (req, res): Promise<
     return;
   }
 
+  if (record.userId !== null && req.user?.id !== record.userId) {
+    res.status(403).json({ error: "forbidden", message: "You do not own this session" });
+    return;
+  }
+
   if (record.status === "completed") {
     res.status(400).json({ error: "already_complete", message: "This session is already completed" });
     return;
@@ -117,6 +127,19 @@ router.post("/onboarding-engine/sessions/:id/answer", async (req, res): Promise<
 
   const engine = getEngine(record.flowId, record.flowVersion);
   const existingAnswers = (record.answers ?? {}) as Record<string, unknown>;
+
+  const currentStep = engine.getStepById(record.currentStepId);
+  if (currentStep) {
+    const validation = engine.validateStepAnswers(currentStep, stepAnswers);
+    if (!validation.valid) {
+      res.status(400).json({
+        error: "validation",
+        message: "Required fields are missing",
+        fields: validation.errors,
+      });
+      return;
+    }
+  }
 
   const state = {
     sessionId: record.id,
@@ -154,7 +177,7 @@ router.post("/onboarding-engine/sessions/:id/answer", async (req, res): Promise<
 });
 
 // POST /api/onboarding-engine/sessions/:id/back
-router.post("/onboarding-engine/sessions/:id/back", async (req, res): Promise<void> => {
+router.post("/onboarding-engine/sessions/:id/back", optionalAuth, async (req, res): Promise<void> => {
   const id = Number(req.params["id"]);
 
   const [record] = await db
@@ -165,6 +188,11 @@ router.post("/onboarding-engine/sessions/:id/back", async (req, res): Promise<vo
 
   if (!record) {
     res.status(404).json({ error: "not_found", message: "Session not found" });
+    return;
+  }
+
+  if (record.userId !== null && req.user?.id !== record.userId) {
+    res.status(403).json({ error: "forbidden", message: "You do not own this session" });
     return;
   }
 

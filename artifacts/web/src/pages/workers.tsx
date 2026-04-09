@@ -43,7 +43,7 @@ export default function Workers() {
       ...(typeFilter !== "all" ? { type: typeFilter as "employee" | "contractor" | "eor" } : {}),
     },
     {
-      query: { queryKey: getListWorkersQueryKey({ status: statusFilter !== "all" ? statusFilter : undefined, type: typeFilter !== "all" ? typeFilter : undefined }) }
+      query: { queryKey: getListWorkersQueryKey({ status: statusFilter !== "all" ? statusFilter as "active" | "inactive" | "onboarding" | "terminated" : undefined, type: typeFilter !== "all" ? typeFilter as "employee" | "contractor" | "eor" : undefined }) }
     }
   );
 

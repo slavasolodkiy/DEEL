@@ -68,7 +68,7 @@ export default function Notifications() {
           <Button
             variant="outline"
             className="rounded-none gap-2"
-            onClick={() => markAllRead.mutate({})}
+            onClick={() => markAllRead.mutate(undefined)}
             disabled={markAllRead.isPending}
             data-testid="button-mark-all-read"
           >

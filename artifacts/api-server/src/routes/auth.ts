@@ -110,7 +110,7 @@ router.get("/auth/me", async (req, res): Promise<void> => {
   const token = authHeader.slice(7);
   let payload: { sub: number };
   try {
-    payload = jwt.verify(token, JWT_SECRET) as { sub: number };
+    payload = jwt.verify(token, JWT_SECRET) as unknown as { sub: number };
   } catch {
     res.status(401).json({ error: "unauthorized", message: "invalid or expired token" });
     return;

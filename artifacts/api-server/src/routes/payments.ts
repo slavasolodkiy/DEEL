@@ -38,7 +38,8 @@ router.post("/payments", async (req, res): Promise<void> => {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  const [payment] = await db.insert(paymentsTable).values(parsed.data).returning();
+  const { amount, ...paymentRest } = parsed.data;
+  const [payment] = await db.insert(paymentsTable).values({ ...paymentRest, amount: String(amount) }).returning();
   res.status(201).json(GetPaymentResponse.parse(toPaymentObj(payment)));
 });
 

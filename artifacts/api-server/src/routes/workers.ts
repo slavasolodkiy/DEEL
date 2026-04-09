@@ -35,7 +35,8 @@ router.post("/workers", async (req, res): Promise<void> => {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  const [worker] = await db.insert(workersTable).values(parsed.data).returning();
+  const { salary, ...rest } = parsed.data;
+  const [worker] = await db.insert(workersTable).values({ ...rest, salary: salary != null ? String(salary) : null }).returning();
   res.status(201).json(GetWorkerResponse.parse({ ...worker, salary: worker.salary ? Number(worker.salary) : null }));
 });
 
@@ -64,7 +65,8 @@ router.patch("/workers/:id", async (req, res): Promise<void> => {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  const [worker] = await db.update(workersTable).set(parsed.data).where(eq(workersTable.id, params.data.id)).returning();
+  const { salary: updateSalary, ...restUpdate } = parsed.data;
+  const [worker] = await db.update(workersTable).set({ ...restUpdate, ...(updateSalary != null ? { salary: String(updateSalary) } : {}) }).where(eq(workersTable.id, params.data.id)).returning();
   if (!worker) {
     res.status(404).json({ error: "Worker not found" });
     return;

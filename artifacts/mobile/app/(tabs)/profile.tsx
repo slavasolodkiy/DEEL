@@ -16,7 +16,7 @@ import { router } from "expo-router";
 import * as Haptics from "expo-haptics";
 
 interface MenuItem {
-  icon: Parameters<typeof Feather>[0]["name"];
+  icon: React.ComponentProps<typeof Feather>["name"];
   label: string;
   onPress: () => void;
   danger?: boolean;

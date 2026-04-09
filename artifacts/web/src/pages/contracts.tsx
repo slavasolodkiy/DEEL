@@ -29,8 +29,8 @@ export default function Contracts() {
   const { toast } = useToast();
 
   const { data: contracts, isLoading } = useListContracts(
-    statusFilter !== "all" ? { status: statusFilter as "draft" | "pending_signature" | "active" | "expired" | "terminated" } : {},
-    { query: { queryKey: getListContractsQueryKey(statusFilter !== "all" ? { status: statusFilter } : {}) } }
+    statusFilter !== "all" ? { status: statusFilter as "draft" | "pending_signature" | "active" | "expired" | "terminated" } : undefined,
+    { query: { queryKey: getListContractsQueryKey(statusFilter !== "all" ? { status: statusFilter as "draft" | "pending_signature" | "active" | "expired" | "terminated" } : undefined) } }
   );
 
   const signContract = useSignContract({

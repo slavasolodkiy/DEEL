@@ -265,6 +265,106 @@ describe("OnboardingEngine — state machine", () => {
   });
 });
 
+describe("OnboardingEngine — validateStepAnswers", () => {
+  const engine = new OnboardingEngine(MINIMAL_FLOW);
+
+  it("passes when all required fields are provided", () => {
+    const result = engine.validateStepAnswers(
+      MINIMAL_FLOW.steps.find((s) => s.id === "entity_type")!,
+      { entityType: "individual" },
+    );
+    expect(result.valid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
+
+  it("fails when a required field is missing", () => {
+    const result = engine.validateStepAnswers(
+      MINIMAL_FLOW.steps.find((s) => s.id === "entity_type")!,
+      {},
+    );
+    expect(result.valid).toBe(false);
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors[0]!.field).toBe("entityType");
+  });
+
+  it("fails when a required field is an empty string", () => {
+    const result = engine.validateStepAnswers(
+      MINIMAL_FLOW.steps.find((s) => s.id === "company_details")!,
+      { companyName: "   " },
+    );
+    expect(result.valid).toBe(false);
+    expect(result.errors[0]!.field).toBe("companyName");
+  });
+
+  it("fails when a required field is an empty array", () => {
+    const step = {
+      id: "docs",
+      type: "document_upload" as const,
+      titleKey: "steps.docs.title",
+      fields: [{ id: "files", type: "file" as const, labelKey: "fields.files.label", required: true }],
+    };
+    const result = engine.validateStepAnswers(step, { files: [] });
+    expect(result.valid).toBe(false);
+    expect(result.errors[0]!.field).toBe("files");
+  });
+
+  it("skips optional fields", () => {
+    const step = {
+      id: "welcome",
+      type: "info" as const,
+      titleKey: "steps.welcome.title",
+      fields: [{ id: "notes", type: "text" as const, labelKey: "fields.notes.label", required: false }],
+    };
+    const result = engine.validateStepAnswers(step, {});
+    expect(result.valid).toBe(true);
+  });
+
+  it("accumulates multiple errors for multiple missing fields", () => {
+    const step = MINIMAL_FLOW.steps.find((s) => s.id === "entity_type")!;
+    const multiFieldStep = {
+      ...step,
+      fields: [
+        { id: "f1", type: "text" as const, labelKey: "l", required: true },
+        { id: "f2", type: "text" as const, labelKey: "l", required: true },
+        { id: "f3", type: "text" as const, labelKey: "l", required: false },
+      ],
+    };
+    const result = engine.validateStepAnswers(multiFieldStep, {});
+    expect(result.valid).toBe(false);
+    expect(result.errors).toHaveLength(2);
+  });
+});
+
+describe("OnboardingEngine — branching behavior", () => {
+  const engine = new OnboardingEngine(MINIMAL_FLOW);
+
+  it("routes to company_details when entityType is company", () => {
+    const state = engine.initializeSession(99);
+    const afterWelcome = engine.submitAnswer(state, {}).state;
+    const result = engine.submitAnswer(afterWelcome, { entityType: "company" });
+    expect(result.state.currentStepId).toBe("company_details");
+  });
+
+  it("routes to contract_type when entityType is individual (skips company_details)", () => {
+    const state = engine.initializeSession(99);
+    const afterWelcome = engine.submitAnswer(state, {}).state;
+    const result = engine.submitAnswer(afterWelcome, { entityType: "individual" });
+    expect(result.state.currentStepId).toBe("contract_type");
+  });
+
+  it("company_details is not visible when entityType is individual", () => {
+    const visible = engine.getVisibleSteps({ entityType: "individual" });
+    const ids = visible.map((s) => s.id);
+    expect(ids).not.toContain("company_details");
+  });
+
+  it("company_details is visible when entityType is company", () => {
+    const visible = engine.getVisibleSteps({ entityType: "company" });
+    const ids = visible.map((s) => s.id);
+    expect(ids).toContain("company_details");
+  });
+});
+
 describe("OnboardingEngine — flow integrity", () => {
   it("all steps have unique IDs", () => {
     const ids = MINIMAL_FLOW.steps.map((s) => s.id);

@@ -35,7 +35,7 @@ export default function PaymentsScreen() {
   const insets = useSafeAreaInsets();
   const { token } = useAuth();
   const domain = process.env["EXPO_PUBLIC_DOMAIN"] ?? "";
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
 
   const topPad = Platform.OS === "web" ? 67 : insets.top;
 
@@ -86,7 +86,7 @@ export default function PaymentsScreen() {
             return (
               <View style={s.card}>
                 <View style={[s.statusIcon, { backgroundColor: cfg.bg }]}>
-                  <Feather name={cfg.icon as Parameters<typeof Feather>[0]["name"]} size={18} color={cfg.color} />
+                  <Feather name={cfg.icon as React.ComponentProps<typeof Feather>["name"]} size={18} color={cfg.color} />
                 </View>
                 <View style={s.info}>
                   <Text style={s.desc} numberOfLines={1}>

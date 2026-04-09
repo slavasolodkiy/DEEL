@@ -1,4 +1,5 @@
 import { Router, type IRouter } from "express";
+import { requireAuth, requireScimToken } from "../middlewares/auth";
 import healthRouter from "./health";
 import organizationsRouter from "./organizations";
 import workersRouter from "./workers";
@@ -13,9 +14,15 @@ import onboardingEngineRouter from "./onboarding-engine";
 
 const router: IRouter = Router();
 
+router.use("/auth/scim/v2", requireScimToken);
+
 router.use(authRouter);
+
 router.use(onboardingEngineRouter);
 router.use(healthRouter);
+
+router.use(requireAuth);
+
 router.use(organizationsRouter);
 router.use(workersRouter);
 router.use(contractsRouter);

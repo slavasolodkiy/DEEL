@@ -41,7 +41,12 @@ router.post("/contracts", async (req, res): Promise<void> => {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  const [contract] = await db.insert(contractsTable).values(parsed.data).returning();
+  const { compensation, startDate, ...contractRest } = parsed.data;
+  const [contract] = await db.insert(contractsTable).values({
+    ...contractRest,
+    compensation: String(compensation),
+    startDate: startDate instanceof Date ? startDate.toISOString().split("T")[0]! : String(startDate),
+  }).returning();
   res.status(201).json(GetContractResponse.parse(toContractObj(contract)));
 });
 
@@ -70,7 +75,8 @@ router.patch("/contracts/:id", async (req, res): Promise<void> => {
     res.status(400).json({ error: parsed.error.message });
     return;
   }
-  const [contract] = await db.update(contractsTable).set(parsed.data).where(eq(contractsTable.id, params.data.id)).returning();
+  const { compensation: updateComp, ...updateContractRest } = parsed.data;
+  const [contract] = await db.update(contractsTable).set({ ...updateContractRest, ...(updateComp != null ? { compensation: String(updateComp) } : {}) }).where(eq(contractsTable.id, params.data.id)).returning();
   if (!contract) {
     res.status(404).json({ error: "Contract not found" });
     return;

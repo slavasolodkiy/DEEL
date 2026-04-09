@@ -88,7 +88,7 @@ export default function HomeScreen() {
       compliance: "shield",
       worker: "users",
     };
-    return (icons[type] ?? "activity") as Parameters<typeof Feather>[0]["name"];
+    return (icons[type] ?? "activity") as React.ComponentProps<typeof Feather>["name"];
   }
 
   function timeAgo(ts: string) {
@@ -122,7 +122,7 @@ export default function HomeScreen() {
           {metrics.map((m) => (
             <View key={m.label} style={s.metricCard}>
               <View style={[s.metricIcon, { backgroundColor: `${m.color}18` }]}>
-                <Feather name={m.icon as Parameters<typeof Feather>[0]["name"]} size={18} color={m.color} />
+                <Feather name={m.icon as React.ComponentProps<typeof Feather>["name"]} size={18} color={m.color} />
               </View>
               <Text style={s.metricValue}>{m.value}</Text>
               <Text style={s.metricLabel}>{m.label}</Text>

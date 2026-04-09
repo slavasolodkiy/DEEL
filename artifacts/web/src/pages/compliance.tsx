@@ -28,8 +28,8 @@ export default function Compliance() {
   const { toast } = useToast();
 
   const { data: items, isLoading } = useListComplianceItems(
-    statusFilter !== "all" ? { status: statusFilter as "pending" | "in_review" | "approved" | "rejected" | "expired" } : {},
-    { query: { queryKey: getListComplianceItemsQueryKey(statusFilter !== "all" ? { status: statusFilter } : {}) } }
+    statusFilter !== "all" ? { status: statusFilter as "pending" | "in_review" | "approved" | "rejected" | "expired" } : undefined,
+    { query: { queryKey: getListComplianceItemsQueryKey(statusFilter !== "all" ? { status: statusFilter as "pending" | "in_review" | "approved" | "rejected" | "expired" } : undefined) } }
   );
 
   const update = useUpdateComplianceItem({

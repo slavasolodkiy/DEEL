@@ -4,6 +4,8 @@ import type {
   StepResult,
   SubmitAnswerResult,
   Step,
+  ValidationResult,
+  ValidationError,
 } from "./types.js";
 import { evaluateNextStep, isStepVisible } from "./rules.js";
 
@@ -93,6 +95,23 @@ export class OnboardingEngine {
     const nextStep = nextStepId ? this.buildStepResult(nextStepId, mergedAnswers) : null;
 
     return { nextStep, isComplete, state: newState };
+  }
+
+  validateStepAnswers(step: Step, answers: Record<string, unknown>): ValidationResult {
+    const errors: ValidationError[] = [];
+    for (const field of step.fields) {
+      if (!field.required) continue;
+      const value = answers[field.id];
+      const missing =
+        value === undefined ||
+        value === null ||
+        (typeof value === "string" && value.trim() === "") ||
+        (Array.isArray(value) && value.length === 0);
+      if (missing) {
+        errors.push({ field: field.id, message: `${field.id} is required` });
+      }
+    }
+    return { valid: errors.length === 0, errors };
   }
 
   initializeSession(sessionId: number): OnboardingState {

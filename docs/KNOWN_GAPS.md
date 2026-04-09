@@ -12,9 +12,10 @@ This document tracks every assumption made where public evidence was incomplete,
 | HTTPS enforcement | No TLS termination in the app layer. Assumed handled by reverse proxy/load balancer. | Deferred |
 | Rate limiting | No rate limiting on auth or onboarding endpoints. Required in production. | Deferred |
 | CSRF protection | No CSRF tokens on state-mutating endpoints. Required if cookies are used for auth. | Deferred |
-| Input sanitization | Basic Zod validation on some routes; not complete across all endpoints. | Partial |
+| Input sanitization | ~~Basic Zod validation on some routes; not complete across all endpoints.~~ **RESOLVED**: Auth middleware protects all non-public routes. Onboarding step validation enforces required fields. | Resolved (v0.4.0) |
 | Audit log | No structured audit trail for admin actions. Enterprise plans typically require this. | Deferred |
 | Data encryption at rest | DB columns not encrypted at application layer (PostgreSQL's native encryption assumed). | Assumed |
+| SCIM token | `SCIM_TOKEN` env var enables dedicated SCIM bearer token; falls back to JWT if unset. Set `SCIM_TOKEN` in production for separate SCIM credential rotation. | Assumed: dev environment |
 
 ---
 

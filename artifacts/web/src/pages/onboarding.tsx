@@ -38,8 +38,8 @@ export default function Onboarding() {
   const { toast } = useToast();
 
   const { data: tasks, isLoading } = useListOnboardingTasks(
-    statusFilter !== "all" ? { status: statusFilter as "pending" | "in_progress" | "completed" | "skipped" } : {},
-    { query: { queryKey: getListOnboardingTasksQueryKey(statusFilter !== "all" ? { status: statusFilter } : {}) } }
+    statusFilter !== "all" ? { status: statusFilter as "pending" | "in_progress" | "completed" | "skipped" } : undefined,
+    { query: { queryKey: getListOnboardingTasksQueryKey(statusFilter !== "all" ? { status: statusFilter as "pending" | "in_progress" | "completed" | "skipped" } : undefined) } }
   );
 
   const updateTask = useUpdateOnboardingTask({
