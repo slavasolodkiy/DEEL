@@ -1,22 +1,37 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: GlobalHR Platform API - HR, Payroll, Contracts, Compliance, Onboarding
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: workers
+    description: Worker (employee/contractor) management
+  - name: contracts
+    description: Contract management
+  - name: payments
+    description: Payroll and payment runs
+  - name: compliance
+    description: Compliance and documents
+  - name: onboarding
+    description: Onboarding workflows
+  - name: dashboard
+    description: Dashboard summary endpoints
+  - name: organizations
+    description: Organization management
+  - name: notifications
+    description: Notification management
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +39,645 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ─── ORGANIZATIONS ────────────────────────────────────────────────────────
+  /organizations:
+    get:
+      operationId: listOrganizations
+      tags: [organizations]
+      summary: List organizations
+      responses:
+        "200":
+          description: List of organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Organization"
+    post:
+      operationId: createOrganization
+      tags: [organizations]
+      summary: Create an organization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrganizationBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Organization"
+
+  /organizations/{id}:
+    get:
+      operationId: getOrganization
+      tags: [organizations]
+      summary: Get an organization by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Organization
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Organization"
+        "404":
+          description: Not found
+
+  # ─── WORKERS ──────────────────────────────────────────────────────────────
+  /workers:
+    get:
+      operationId: listWorkers
+      tags: [workers]
+      summary: List all workers
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [active, inactive, onboarding, terminated]
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [employee, contractor, eor]
+        - name: country
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of workers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Worker"
+    post:
+      operationId: createWorker
+      tags: [workers]
+      summary: Create a worker
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateWorkerBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Worker"
+
+  /workers/{id}:
+    get:
+      operationId: getWorker
+      tags: [workers]
+      summary: Get a worker by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Worker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Worker"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateWorker
+      tags: [workers]
+      summary: Update a worker
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateWorkerBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Worker"
+        "404":
+          description: Not found
+    delete:
+      operationId: deleteWorker
+      tags: [workers]
+      summary: Terminate a worker
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Terminated
+
+  # ─── CONTRACTS ────────────────────────────────────────────────────────────
+  /contracts:
+    get:
+      operationId: listContracts
+      tags: [contracts]
+      summary: List all contracts
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [draft, pending_signature, active, expired, terminated]
+        - name: workerId
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of contracts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Contract"
+    post:
+      operationId: createContract
+      tags: [contracts]
+      summary: Create a contract
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateContractBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contract"
+
+  /contracts/{id}:
+    get:
+      operationId: getContract
+      tags: [contracts]
+      summary: Get a contract
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Contract
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contract"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateContract
+      tags: [contracts]
+      summary: Update a contract
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateContractBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contract"
+
+  /contracts/{id}/sign:
+    post:
+      operationId: signContract
+      tags: [contracts]
+      summary: Sign a contract
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Signed contract
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contract"
+
+  # ─── PAYMENTS ─────────────────────────────────────────────────────────────
+  /payments:
+    get:
+      operationId: listPayments
+      tags: [payments]
+      summary: List payment runs
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [pending, processing, completed, failed]
+        - name: workerId
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Payment"
+    post:
+      operationId: createPayment
+      tags: [payments]
+      summary: Create a payment run
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePaymentBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+
+  /payments/{id}:
+    get:
+      operationId: getPayment
+      tags: [payments]
+      summary: Get a payment by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Payment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+        "404":
+          description: Not found
+
+  /payments/{id}/approve:
+    post:
+      operationId: approvePayment
+      tags: [payments]
+      summary: Approve a payment run
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Approved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment"
+
+  # ─── COMPLIANCE ───────────────────────────────────────────────────────────
+  /compliance:
+    get:
+      operationId: listComplianceItems
+      tags: [compliance]
+      summary: List compliance items
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [pending, in_review, approved, rejected, expired]
+        - name: workerId
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of compliance items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ComplianceItem"
+    post:
+      operationId: createComplianceItem
+      tags: [compliance]
+      summary: Create a compliance document
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateComplianceItemBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComplianceItem"
+
+  /compliance/{id}:
+    get:
+      operationId: getComplianceItem
+      tags: [compliance]
+      summary: Get a compliance item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Compliance item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComplianceItem"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateComplianceItem
+      tags: [compliance]
+      summary: Update compliance status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateComplianceItemBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComplianceItem"
+
+  # ─── ONBOARDING ───────────────────────────────────────────────────────────
+  /onboarding:
+    get:
+      operationId: listOnboardingTasks
+      tags: [onboarding]
+      summary: List onboarding tasks
+      parameters:
+        - name: workerId
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [pending, in_progress, completed, skipped]
+      responses:
+        "200":
+          description: List of onboarding tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OnboardingTask"
+    post:
+      operationId: createOnboardingTask
+      tags: [onboarding]
+      summary: Create an onboarding task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOnboardingTaskBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnboardingTask"
+
+  /onboarding/{id}:
+    patch:
+      operationId: updateOnboardingTask
+      tags: [onboarding]
+      summary: Update onboarding task status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOnboardingTaskBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnboardingTask"
+
+  # ─── NOTIFICATIONS ────────────────────────────────────────────────────────
+  /notifications:
+    get:
+      operationId: listNotifications
+      tags: [notifications]
+      summary: List notifications
+      parameters:
+        - name: unreadOnly
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+
+  /notifications/{id}/read:
+    post:
+      operationId: markNotificationRead
+      tags: [notifications]
+      summary: Mark a notification as read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Notification marked as read
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+
+  /notifications/read-all:
+    post:
+      operationId: markAllNotificationsRead
+      tags: [notifications]
+      summary: Mark all notifications as read
+      responses:
+        "200":
+          description: All marked read
+
+  # ─── DASHBOARD (wow endpoints) ────────────────────────────────────────────
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get high-level dashboard metrics
+      responses:
+        "200":
+          description: Summary metrics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /dashboard/payroll-timeline:
+    get:
+      operationId: getPayrollTimeline
+      tags: [dashboard]
+      summary: Get payroll spend over time (last 12 months)
+      responses:
+        "200":
+          description: Timeline data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PayrollTimelinePoint"
+
+  /dashboard/workers-by-country:
+    get:
+      operationId: getWorkersByCountry
+      tags: [dashboard]
+      summary: Worker count grouped by country
+      responses:
+        "200":
+          description: Country breakdown
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CountryCount"
+
+  /dashboard/recent-activity:
+    get:
+      operationId: getRecentActivity
+      tags: [dashboard]
+      summary: Recent activity feed (contracts, payments, onboarding)
+      responses:
+        "200":
+          description: Activity items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActivityItem"
+
+  /dashboard/compliance-overview:
+    get:
+      operationId: getComplianceOverview
+      tags: [dashboard]
+      summary: Compliance status overview counts
+      responses:
+        "200":
+          description: Compliance overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComplianceOverview"
+
 components:
   schemas:
     HealthStatus:
@@ -31,6 +685,519 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    # ─── ORGANIZATION ────────────────────────────────────────────────────────
+    Organization:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        legalName:
+          type: ["string", "null"]
+        country:
+          type: string
+        industry:
+          type: string
+        size:
+          type: string
+          enum: [startup, smb, enterprise]
+        logoUrl:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, name, country, industry, size, createdAt, updatedAt]
+
+    CreateOrganizationBody:
+      type: object
+      properties:
+        name:
+          type: string
+        legalName:
+          type: ["string", "null"]
+        country:
+          type: string
+        industry:
+          type: string
+        size:
+          type: string
+          enum: [startup, smb, enterprise]
+        logoUrl:
+          type: ["string", "null"]
+      required: [name, country, industry, size]
+
+    # ─── WORKER ───────────────────────────────────────────────────────────────
+    Worker:
+      type: object
+      properties:
+        id:
+          type: integer
+        organizationId:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        jobTitle:
+          type: string
+        department:
+          type: string
+        workerType:
+          type: string
+          enum: [employee, contractor, eor]
+        status:
+          type: string
+          enum: [active, inactive, onboarding, terminated]
+        country:
+          type: string
+        currency:
+          type: string
+        salary:
+          type: ["number", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        startDate:
+          type: ["string", "null"]
+          format: date
+        endDate:
+          type: ["string", "null"]
+          format: date
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, organizationId, firstName, lastName, email, jobTitle, department, workerType, status, country, currency, createdAt, updatedAt]
+
+    CreateWorkerBody:
+      type: object
+      properties:
+        organizationId:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        jobTitle:
+          type: string
+        department:
+          type: string
+        workerType:
+          type: string
+          enum: [employee, contractor, eor]
+        country:
+          type: string
+        currency:
+          type: string
+        salary:
+          type: ["number", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        startDate:
+          type: ["string", "null"]
+      required: [organizationId, firstName, lastName, email, jobTitle, department, workerType, country, currency]
+
+    UpdateWorkerBody:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        jobTitle:
+          type: string
+        department:
+          type: string
+        status:
+          type: string
+          enum: [active, inactive, onboarding, terminated]
+        salary:
+          type: ["number", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+
+    # ─── CONTRACT ────────────────────────────────────────────────────────────
+    Contract:
+      type: object
+      properties:
+        id:
+          type: integer
+        workerId:
+          type: integer
+        organizationId:
+          type: integer
+        title:
+          type: string
+        contractType:
+          type: string
+          enum: [full_time, part_time, fixed_term, indefinite, freelance]
+        status:
+          type: string
+          enum: [draft, pending_signature, active, expired, terminated]
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: ["string", "null"]
+          format: date
+        currency:
+          type: string
+        compensation:
+          type: number
+        compensationPeriod:
+          type: string
+          enum: [hourly, monthly, annual]
+        signedAt:
+          type: ["string", "null"]
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, workerId, organizationId, title, contractType, status, startDate, currency, compensation, compensationPeriod, createdAt, updatedAt]
+
+    CreateContractBody:
+      type: object
+      properties:
+        workerId:
+          type: integer
+        organizationId:
+          type: integer
+        title:
+          type: string
+        contractType:
+          type: string
+          enum: [full_time, part_time, fixed_term, indefinite, freelance]
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: ["string", "null"]
+        currency:
+          type: string
+        compensation:
+          type: number
+        compensationPeriod:
+          type: string
+          enum: [hourly, monthly, annual]
+      required: [workerId, organizationId, title, contractType, startDate, currency, compensation, compensationPeriod]
+
+    UpdateContractBody:
+      type: object
+      properties:
+        title:
+          type: string
+        status:
+          type: string
+          enum: [draft, pending_signature, active, expired, terminated]
+        endDate:
+          type: ["string", "null"]
+        compensation:
+          type: number
+
+    # ─── PAYMENT ─────────────────────────────────────────────────────────────
+    Payment:
+      type: object
+      properties:
+        id:
+          type: integer
+        workerId:
+          type: integer
+        organizationId:
+          type: integer
+        amount:
+          type: number
+        currency:
+          type: string
+        status:
+          type: string
+          enum: [pending, processing, completed, failed]
+        paymentType:
+          type: string
+          enum: [salary, bonus, expense, invoice]
+        periodStart:
+          type: ["string", "null"]
+          format: date
+        periodEnd:
+          type: ["string", "null"]
+          format: date
+        processedAt:
+          type: ["string", "null"]
+          format: date-time
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, workerId, organizationId, amount, currency, status, paymentType, createdAt, updatedAt]
+
+    CreatePaymentBody:
+      type: object
+      properties:
+        workerId:
+          type: integer
+        organizationId:
+          type: integer
+        amount:
+          type: number
+        currency:
+          type: string
+        paymentType:
+          type: string
+          enum: [salary, bonus, expense, invoice]
+        periodStart:
+          type: ["string", "null"]
+        periodEnd:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+      required: [workerId, organizationId, amount, currency, paymentType]
+
+    # ─── COMPLIANCE ───────────────────────────────────────────────────────────
+    ComplianceItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        workerId:
+          type: integer
+        organizationId:
+          type: integer
+        documentType:
+          type: string
+          enum: [work_permit, tax_id, id_document, right_to_work, background_check, other]
+        status:
+          type: string
+          enum: [pending, in_review, approved, rejected, expired]
+        country:
+          type: string
+        notes:
+          type: ["string", "null"]
+        expiresAt:
+          type: ["string", "null"]
+          format: date
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, workerId, organizationId, documentType, status, country, createdAt, updatedAt]
+
+    CreateComplianceItemBody:
+      type: object
+      properties:
+        workerId:
+          type: integer
+        organizationId:
+          type: integer
+        documentType:
+          type: string
+          enum: [work_permit, tax_id, id_document, right_to_work, background_check, other]
+        country:
+          type: string
+        notes:
+          type: ["string", "null"]
+        expiresAt:
+          type: ["string", "null"]
+      required: [workerId, organizationId, documentType, country]
+
+    UpdateComplianceItemBody:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, in_review, approved, rejected, expired]
+        notes:
+          type: ["string", "null"]
+        expiresAt:
+          type: ["string", "null"]
+
+    # ─── ONBOARDING ───────────────────────────────────────────────────────────
+    OnboardingTask:
+      type: object
+      properties:
+        id:
+          type: integer
+        workerId:
+          type: integer
+        organizationId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        category:
+          type: string
+          enum: [documents, equipment, access, training, compliance, introduction, other]
+        status:
+          type: string
+          enum: [pending, in_progress, completed, skipped]
+        dueDate:
+          type: ["string", "null"]
+          format: date
+        completedAt:
+          type: ["string", "null"]
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [id, workerId, organizationId, title, category, status, createdAt, updatedAt]
+
+    CreateOnboardingTaskBody:
+      type: object
+      properties:
+        workerId:
+          type: integer
+        organizationId:
+          type: integer
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        category:
+          type: string
+          enum: [documents, equipment, access, training, compliance, introduction, other]
+        dueDate:
+          type: ["string", "null"]
+      required: [workerId, organizationId, title, category]
+
+    UpdateOnboardingTaskBody:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, in_progress, completed, skipped]
+        description:
+          type: ["string", "null"]
+
+    # ─── NOTIFICATION ─────────────────────────────────────────────────────────
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        message:
+          type: string
+        type:
+          type: string
+          enum: [contract, payment, compliance, onboarding, general]
+        isRead:
+          type: boolean
+        workerId:
+          type: ["integer", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, title, message, type, isRead, createdAt]
+
+    # ─── DASHBOARD ────────────────────────────────────────────────────────────
+    DashboardSummary:
+      type: object
+      properties:
+        totalWorkers:
+          type: integer
+        activeWorkers:
+          type: integer
+        onboardingWorkers:
+          type: integer
+        totalContracts:
+          type: integer
+        activeContracts:
+          type: integer
+        pendingPayments:
+          type: integer
+        totalPayrollThisMonth:
+          type: number
+        complianceAlerts:
+          type: integer
+        unreadNotifications:
+          type: integer
+        countriesCount:
+          type: integer
+      required: [totalWorkers, activeWorkers, onboardingWorkers, totalContracts, activeContracts, pendingPayments, totalPayrollThisMonth, complianceAlerts, unreadNotifications, countriesCount]
+
+    PayrollTimelinePoint:
+      type: object
+      properties:
+        month:
+          type: string
+        totalAmount:
+          type: number
+        workerCount:
+          type: integer
+      required: [month, totalAmount, workerCount]
+
+    CountryCount:
+      type: object
+      properties:
+        country:
+          type: string
+        count:
+          type: integer
+        currency:
+          type: string
+      required: [country, count, currency]
+
+    ActivityItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [contract_signed, payment_processed, worker_added, compliance_approved, onboarding_completed, contract_created, payment_failed]
+        description:
+          type: string
+        workerName:
+          type: ["string", "null"]
+        country:
+          type: ["string", "null"]
+        amount:
+          type: ["number", "null"]
+        currency:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required: [id, type, description, createdAt]
+
+    ComplianceOverview:
+      type: object
+      properties:
+        pending:
+          type: integer
+        inReview:
+          type: integer
+        approved:
+          type: integer
+        rejected:
+          type: integer
+        expired:
+          type: integer
+        total:
+          type: integer
+      required: [pending, inReview, approved, rejected, expired, total]

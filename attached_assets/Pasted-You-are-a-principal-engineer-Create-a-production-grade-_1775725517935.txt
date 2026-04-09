@@ -1,0 +1,62 @@
+You are a principal engineer. Create a production-grade monorepo foundation for a “Deel-like global HR/payroll reference platform” (not a brand copy).
+
+Important constraints:
+1. Do NOT copy proprietary branding/assets/text from Deel.
+2. Build a neutral reference architecture we can iterate on.
+3. Keep all code and docs in English.
+4. If a decision is uncertain, choose a sensible default and document it in ADR.
+
+Deliverables (phase 0 only):
+1. Monorepo scaffold with pnpm + Turborepo.
+2. Workspace structure:
+   - /apps/web (Next.js + TypeScript)
+   - /apps/mobile (Expo React Native + TypeScript)
+   - /services/gateway (API gateway/BFF)
+   - /services/auth
+   - /services/onboarding
+   - /services/contracts
+   - /services/payments
+   - /services/compliance
+   - /services/notifications
+   - /packages/shared (types, utils, schema contracts)
+   - /openapi
+   - /infra
+   - /docs
+3. Local infra via docker-compose:
+   - PostgreSQL
+   - Redis
+   - optional message broker (NATS or RabbitMQ; pick one and document why)
+4. Engineering standards:
+   - ESLint + Prettier
+   - TypeScript strict mode
+   - Husky + lint-staged
+   - basic commit convention check
+5. CI/CD (GitHub Actions):
+   - install
+   - lint
+   - typecheck
+   - unit tests
+   - build
+6. Minimal runnable placeholders:
+   - “Hello” endpoint in each service
+   - web app landing page
+   - mobile app launch screen
+7. Documentation:
+   - /README.md with one-command local start
+   - /docs/ARCHITECTURE.md (initial high-level)
+   - /docs/DECISIONS.md (ADR list, short)
+   - /docs/CONTRIBUTING.md
+   - /docs/ROADMAP.md (phase plan)
+
+Acceptance criteria:
+1. `pnpm install` works cleanly.
+2. `pnpm -w lint`, `pnpm -w typecheck`, `pnpm -w test`, `pnpm -w build` pass.
+3. `docker compose up -d` starts required dependencies.
+4. `pnpm dev` launches web + core services.
+5. CI workflow file is present and valid.
+
+Output format required:
+1. Print final repo tree (compact).
+2. Print exact run commands.
+3. Print unresolved risks/assumptions (short list).
+4. Stop and wait for my next prompt (do not start feature implementation yet).
