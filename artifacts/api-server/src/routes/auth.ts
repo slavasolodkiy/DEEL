@@ -4,10 +4,10 @@ import jwt from "jsonwebtoken";
 import { db } from "@workspace/db";
 import { usersTable, authSessionsTable } from "@workspace/db/schema";
 import { eq } from "drizzle-orm";
+import { JWT_SECRET } from "../middlewares/auth";
 
 const router = Router();
 
-const JWT_SECRET = process.env.JWT_SECRET ?? process.env.SESSION_SECRET ?? "dev-secret-change-in-prod";
 const TOKEN_TTL_HOURS = 24;
 
 function signToken(userId: number): string {

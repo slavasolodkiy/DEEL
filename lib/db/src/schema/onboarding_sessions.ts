@@ -10,6 +10,9 @@ export const onboardingSessionsTable = pgTable("onboarding_sessions", {
   currentStepId: text("current_step_id").notNull(),
   answers: jsonb("answers").notNull().default({}),
   status: text("status").notNull().default("in_progress"),
+  // Null for authenticated sessions (ownership verified via userId).
+  // SHA-256 hash of the plain sessionAccessToken for anonymous sessions.
+  sessionAccessTokenHash: text("session_access_token_hash"),
   completedAt: timestamp("completed_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),

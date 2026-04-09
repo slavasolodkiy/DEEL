@@ -1,0 +1,66 @@
+You are continuing work in the existing repository. Do not rebuild from scratch.
+
+Important process constraint:
+- Do NOT create or modify `.github/workflows/ci.yml`.
+- Keep GitHub push flow compatible with Replit.
+
+Authoritative tasks for this run:
+
+1) Fix workspace type safety so root checks pass
+- Resolve React type duplication across workspace (`@types/react` / `@types/react-dom`).
+- Ensure a single compatible strategy for web + mockup-sandbox + mobile (Expo constraints allowed, but no cross-package type conflicts).
+- Fix current TS errors in:
+  - artifacts/web/src/components/ui/button-group.tsx
+  - artifacts/web/src/components/ui/calendar.tsx
+  - artifacts/mockup-sandbox/src/components/ui/calendar.tsx
+  - artifacts/mockup-sandbox/src/components/ui/spinner.tsx
+- Required result:
+  - `pnpm -w run typecheck` passes
+  - `pnpm run build` passes
+
+2) Close remaining auth/session security gaps
+- Remove hardcoded JWT fallback secret; fail fast if required secret env vars are missing.
+- Upgrade protected auth middleware so it validates:
+  - JWT signature/expiry
+  - session existence in DB
+  - session not revoked
+  - session not expired (`expiresAt > now`)
+- Keep `/api/health`, `/api/auth/register`, `/api/auth/login`, `/api/auth/oauth/:provider` public.
+- Keep SCIM protected via SCIM token/JWT guard.
+
+3) Secure anonymous onboarding sessions
+- Keep flow discovery endpoints public:
+  - GET /api/onboarding-engine/flows
+  - GET /api/onboarding-engine/flows/:flowId
+- For anonymous session creation:
+  - issue a high-entropy `sessionAccessToken`
+  - store only a hash in DB
+  - require this token (header: `X-Onboarding-Session-Token`) for:
+    - GET /sessions/:id
+    - POST /sessions/:id/answer
+    - POST /sessions/:id/back
+- For authenticated sessions:
+  - continue owner checks by `userId`
+- Return 401/403 consistently for missing/invalid ownership/token.
+
+4) Tests and docs
+- Add/extend tests for:
+  - revoked/expired session rejection in middleware
+  - anonymous onboarding token protection
+  - authenticated ownership enforcement
+- Update:
+  - docs/KNOWN_GAPS.md
+  - docs/changelog.md
+  - README.md verification commands
+
+5) Delivery rules
+- Atomic commits with clear messages.
+- Do not remove features unless needed for security/correctness.
+- Keep changes minimal and targeted.
+
+Required final output:
+1. Files changed by task
+2. Commands run and results
+3. Test evidence
+4. Commit hashes
+5. Remaining risks

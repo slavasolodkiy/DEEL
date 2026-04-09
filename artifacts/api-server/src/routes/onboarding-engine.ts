@@ -1,4 +1,5 @@
 import { Router } from "express";
+import crypto from "crypto";
 import { db } from "@workspace/db";
 import { onboardingSessionsTable, onboardingStepLogTable } from "@workspace/db/schema";
 import { getEngine, listFlows } from "@workspace/onboarding-engine";
@@ -6,6 +7,62 @@ import { eq } from "drizzle-orm";
 import { optionalAuth } from "../middlewares/auth";
 
 const router = Router();
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+/** Generate a 256-bit random token and its SHA-256 hex hash. */
+function generateSessionToken(): { plainToken: string; hash: string } {
+  const plainToken = crypto.randomBytes(32).toString("hex");
+  const hash = crypto.createHash("sha256").update(plainToken).digest("hex");
+  return { plainToken, hash };
+}
+
+function hashToken(token: string): string {
+  return crypto.createHash("sha256").update(token).digest("hex");
+}
+
+/**
+ * Verify ownership of an onboarding session.
+ *
+ * - Authenticated sessions  → owner check via userId
+ * - Anonymous sessions      → compare X-Onboarding-Session-Token SHA-256 hash
+ *
+ * Returns `true` if access is granted, writes the appropriate error response
+ * and returns `false` otherwise.
+ */
+function checkSessionAccess(
+  req: Parameters<typeof optionalAuth>[0],
+  res: Parameters<typeof optionalAuth>[1],
+  record: typeof onboardingSessionsTable.$inferSelect,
+): boolean {
+  if (record.userId !== null) {
+    if (req.user?.id !== record.userId) {
+      res.status(403).json({ error: "forbidden", message: "You do not own this session" });
+      return false;
+    }
+    return true;
+  }
+
+  // Anonymous session — token required
+  const rawHeader = req.headers["x-onboarding-session-token"];
+  const providedToken = Array.isArray(rawHeader) ? rawHeader[0] : rawHeader;
+  if (!providedToken) {
+    res.status(401).json({
+      error: "unauthorized",
+      message: "X-Onboarding-Session-Token header is required for anonymous sessions",
+    });
+    return false;
+  }
+
+  if (!record.sessionAccessTokenHash || hashToken(providedToken) !== record.sessionAccessTokenHash) {
+    res.status(401).json({ error: "unauthorized", message: "Invalid session access token" });
+    return false;
+  }
+
+  return true;
+}
+
+// ─── Public — flow discovery ─────────────────────────────────────────────────
 
 // GET /api/onboarding-engine/flows
 router.get("/onboarding-engine/flows", (_req, res): void => {
@@ -23,6 +80,8 @@ router.get("/onboarding-engine/flows/:flowId", (req, res): void => {
     res.status(404).json({ error: "not_found", message: `Flow '${flowId}' version '${version}' not found` });
   }
 });
+
+// ─── Session creation (optionalAuth) ─────────────────────────────────────────
 
 // POST /api/onboarding-engine/sessions
 router.post("/onboarding-engine/sessions", optionalAuth, async (req, res): Promise<void> => {
@@ -44,6 +103,10 @@ router.post("/onboarding-engine/sessions", optionalAuth, async (req, res): Promi
     return;
   }
 
+  // For anonymous sessions, generate a high-entropy access token and store its hash.
+  const isAnonymous = !req.user;
+  const tokenData = isAnonymous ? generateSessionToken() : null;
+
   const [record] = await db
     .insert(onboardingSessionsTable)
     .values({
@@ -53,14 +116,22 @@ router.post("/onboarding-engine/sessions", optionalAuth, async (req, res): Promi
       currentStepId: engine.getFirstStep().id,
       answers: {},
       status: "in_progress",
+      sessionAccessTokenHash: tokenData?.hash ?? null,
     })
     .returning();
 
   const state = engine.initializeSession(record!.id);
   const currentStep = engine.buildStepResult(state.currentStepId, state.answers);
 
-  res.status(201).json({ session: { ...state, id: record!.id }, currentStep });
+  res.status(201).json({
+    session: { ...state, id: record!.id },
+    currentStep,
+    // Only returned once — client must store this for subsequent anonymous requests.
+    ...(tokenData ? { sessionAccessToken: tokenData.plainToken } : {}),
+  });
 });
+
+// ─── Session access (optionalAuth + ownership) ────────────────────────────────
 
 // GET /api/onboarding-engine/sessions/:id
 router.get("/onboarding-engine/sessions/:id", optionalAuth, async (req, res): Promise<void> => {
@@ -77,10 +148,7 @@ router.get("/onboarding-engine/sessions/:id", optionalAuth, async (req, res): Pr
     return;
   }
 
-  if (record.userId !== null && req.user?.id !== record.userId) {
-    res.status(403).json({ error: "forbidden", message: "You do not own this session" });
-    return;
-  }
+  if (!checkSessionAccess(req, res, record)) return;
 
   const engine = getEngine(record.flowId, record.flowVersion);
   const answers = (record.answers ?? {}) as Record<string, unknown>;
@@ -115,10 +183,7 @@ router.post("/onboarding-engine/sessions/:id/answer", optionalAuth, async (req, 
     return;
   }
 
-  if (record.userId !== null && req.user?.id !== record.userId) {
-    res.status(403).json({ error: "forbidden", message: "You do not own this session" });
-    return;
-  }
+  if (!checkSessionAccess(req, res, record)) return;
 
   if (record.status === "completed") {
     res.status(400).json({ error: "already_complete", message: "This session is already completed" });
@@ -191,10 +256,7 @@ router.post("/onboarding-engine/sessions/:id/back", optionalAuth, async (req, re
     return;
   }
 
-  if (record.userId !== null && req.user?.id !== record.userId) {
-    res.status(403).json({ error: "forbidden", message: "You do not own this session" });
-    return;
-  }
+  if (!checkSessionAccess(req, res, record)) return;
 
   const engine = getEngine(record.flowId, record.flowVersion);
   const answers = (record.answers ?? {}) as Record<string, unknown>;

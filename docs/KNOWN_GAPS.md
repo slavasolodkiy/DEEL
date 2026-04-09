@@ -8,7 +8,7 @@ This document tracks every assumption made where public evidence was incomplete,
 
 | Gap | Description | Assumed / Deferred |
 |---|---|---|
-| JWT secret management | `JWT_SECRET` falls back to `SESSION_SECRET`. In production, use a dedicated, rotated secret. | Assumed: dev environment |
+| JWT secret management | ~~`JWT_SECRET` falls back to hardcoded string.~~ **RESOLVED**: Middleware throws at startup if neither `JWT_SECRET` nor `SESSION_SECRET` is set. Falls back to `SESSION_SECRET` only in dev; no silent defaults in any environment. | Resolved (v0.5.0) |
 | HTTPS enforcement | No TLS termination in the app layer. Assumed handled by reverse proxy/load balancer. | Deferred |
 | Rate limiting | No rate limiting on auth or onboarding endpoints. Required in production. | Deferred |
 | CSRF protection | No CSRF tokens on state-mutating endpoints. Required if cookies are used for auth. | Deferred |
@@ -148,9 +148,12 @@ This document tracks every assumption made where public evidence was incomplete,
 ## What's Confidently Built (No Gaps)
 
 - Auth: email/password with JWT, session revocation, SCIM adapter skeleton
+- Auth middleware: fail-fast JWT_SECRET validation at startup; every `requireAuth` call verifies the session exists in DB, is not revoked, and has not expired
 - Onboarding engine: state machine, rules engine, versioned configs, branching
+- Onboarding session access control: anonymous sessions protected by 256-bit high-entropy token (only SHA-256 hash stored in DB); authenticated sessions verified via userId ownership
 - Individual + business flows end-to-end
 - Web UI: multi-step form, branch-aware rendering, back navigation, review, complete
 - i18n: en/es/fr keys, react-i18next wired
 - HR platform: workers, contracts, payments, compliance, onboarding tasks, notifications, dashboard
 - API: all 30+ endpoints responding with real DB data
+- Unit test suite: 16 tests covering auth middleware security (revoked/expired sessions) and onboarding session access control (anonymous token + authenticated ownership)

@@ -10,11 +10,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 - Root `README.md` with local setup, verification commands, and API reference table
 - `docs/KNOWN_GAPS.md` (existing) updated with security and test gap resolutions
+- **`sessionAccessTokenHash` column** added to `onboarding_sessions` table — stores SHA-256 hash of anonymous session token; plain-text token never persisted
 
 ### Security
 - **Auth middleware** (`middlewares/auth.ts`): reusable `requireAuth`, `optionalAuth`, `requireScimToken` middleware
+- **Fail-fast JWT_SECRET** (`middlewares/auth.ts`): server throws `Error` at startup if neither `JWT_SECRET` nor `SESSION_SECRET` is set — no silent fallback to a hardcoded string
+- **DB-backed session validation** (`requireAuth`): every authenticated request queries `auth_sessions` and rejects if session is missing, `isRevoked = true`, or `expiresAt ≤ now` — JWT alone is no longer sufficient
+- **Shared JWT_SECRET constant**: `routes/auth.ts` imports `JWT_SECRET` from `middlewares/auth` — single source of truth, no redundant fallback
 - **Route protection**: all non-public API routes now require Bearer JWT via `requireAuth`; SCIM routes guarded with `requireScimToken`
-- **Session ownership**: `GET/POST /sessions/:id`, `POST /sessions/:id/answer`, `POST /sessions/:id/back` return 403 when the authenticated user does not own the session
+- **Anonymous onboarding session tokens**: `POST /sessions` returns a one-time 256-bit `sessionAccessToken` for unauthenticated sessions; subsequent GET/POST/back calls must include the plain token in `X-Onboarding-Session-Token` header; only the SHA-256 hash is stored in DB
+- **Authenticated session ownership**: `GET/POST /sessions/:id`, `/answer`, `/back` return 403 when authenticated user ID does not match `sessions.userId`
 - **userId injection**: session creation ignores `userId` from request body; identity derived from JWT token
 
 ### Changed
@@ -32,12 +37,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Mobile `workers.tsx`, `payments.tsx`: `headers` typed as `Record<string, string>` to fix `Authorization?: undefined` compile error
 - Mobile `profile.tsx`, `index.tsx`, `payments.tsx`: `Parameters<typeof Feather>` replaced with `React.ComponentProps<typeof Feather>` to fix `never` type under strict mode
 - Web pages: `{}` replaced with `undefined` for missing filter params; queryKey status values cast to enum types; `ChevronLeft` import added to `step-renderer.tsx`
+- UI components: `button-group.tsx` element type cast; `calendar.tsx` ref + props casts; `spinner.tsx` switched to `LucideProps` — `pnpm -w run typecheck` clean across web + mockup-sandbox
 
 ### Tests
-- 10 new unit tests in `lib/onboarding-engine/src/__tests__/engine.test.ts`:
-  - `validateStepAnswers`: passes for all required fields, fails for missing/empty/empty-array fields, skips optional fields, accumulates multiple errors
-  - Branching: company vs individual routing, visibility rules for `company_details` step
-- Total: 34 unit tests, all passing
+- **16 new unit tests** in `artifacts/api-server/src/__tests__/`:
+  - `auth-middleware.test.ts` (7 tests): no token → 401, invalid JWT → 401, expired JWT → 401, session not found → 401, session revoked → 401, session expired → 401, live session → passes
+  - `onboarding-session-security.test.ts` (9 tests): missing token → 401, wrong token → 401, correct token → granted, wrong user → 403, owner → granted, hash consistency, hash uniqueness
+- Previous: 34 tests in `lib/onboarding-engine`; **total now: 50 unit tests, all passing**
 
 ---
 

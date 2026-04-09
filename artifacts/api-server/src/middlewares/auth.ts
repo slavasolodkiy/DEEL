@@ -1,10 +1,18 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { db } from "@workspace/db";
+import { authSessionsTable } from "@workspace/db/schema";
+import { and, eq, gt } from "drizzle-orm";
 
-const JWT_SECRET =
-  process.env["JWT_SECRET"] ??
-  process.env["SESSION_SECRET"] ??
-  "dev-secret-change-in-prod";
+// Fail fast at startup — do NOT allow a hardcoded fallback in any environment.
+const _rawSecret = process.env["JWT_SECRET"] ?? process.env["SESSION_SECRET"];
+if (!_rawSecret) {
+  throw new Error(
+    "FATAL: JWT_SECRET (or SESSION_SECRET) environment variable is required but not set. " +
+      "Set it before starting the server.",
+  );
+}
+export const JWT_SECRET: string = _rawSecret;
 
 export interface AuthUser {
   id: number;
@@ -20,7 +28,15 @@ declare global {
   }
 }
 
-export function requireAuth(req: Request, res: Response, next: NextFunction): void {
+/**
+ * requireAuth — validates:
+ *   1. Bearer token present
+ *   2. JWT signature and expiry valid
+ *   3. Session exists in DB
+ *   4. Session is not revoked
+ *   5. Session has not expired (expiresAt > now)
+ */
+export async function requireAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith("Bearer ")) {
     res.status(401).json({ error: "unauthorized", message: "Bearer token required" });
@@ -33,6 +49,23 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
     payload = jwt.verify(token, JWT_SECRET) as unknown as { sub: number };
   } catch {
     res.status(401).json({ error: "unauthorized", message: "Invalid or expired token" });
+    return;
+  }
+
+  const [session] = await db
+    .select()
+    .from(authSessionsTable)
+    .where(
+      and(
+        eq(authSessionsTable.token, token),
+        eq(authSessionsTable.isRevoked, false),
+        gt(authSessionsTable.expiresAt, new Date()),
+      ),
+    )
+    .limit(1);
+
+  if (!session) {
+    res.status(401).json({ error: "unauthorized", message: "Session not found, revoked, or expired" });
     return;
   }
 
