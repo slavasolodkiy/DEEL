@@ -1,0 +1,29 @@
+Category,Integration,Type,Direction,What It Does,Verified,Source URL,Confidence
+App Provisioning & SSO,Okta,Identity,Bi-directional,SAML 2.0 SSO login + SCIM user provisioning/deprovisioning,Yes,https://help.letsdeel.com/hc/en-gb/articles/22184491367953,High
+App Provisioning & SSO,Azure Active Directory,Identity,Bi-directional,SAML 2.0 SSO login + SCIM user provisioning via Azure AD,Yes,https://help.letsdeel.com/hc/en-gb/articles/22182936274833,High
+App Provisioning & SSO,Google Workspace,Identity,Inbound,SSO via Google OAuth for login,Partial,https://www.deel.com/integrations/,Medium
+App Provisioning & SSO,OneLogin,Identity,Bi-directional,SAML SSO + SCIM provisioning,Partial,https://www.deel.com/integrations/,Medium
+App Provisioning & SSO,FaceUp,App Provisioning & SSO,Unknown,Whistleblowing / anonymous reporting with SSO,Yes,https://www.deel.com/integrations/face-up,Medium
+Human Resources,BambooHR,HRIS,Bi-directional,Sync employee records between BambooHR and Deel,Yes,https://www.deel.com/integrations/,High
+Human Resources,Workday,HRIS,Bi-directional,Employee lifecycle sync with Workday HCM,Yes,https://www.deel.com/integrations/,High
+Human Resources,SAP SuccessFactors,HRIS,Bi-directional,Enterprise HCM sync for headcount and payroll,Yes,https://www.deel.com/integrations/,High
+Human Resources,UKG Ready,HRIS,Unknown,Workforce management sync,Yes,https://www.deel.com/integrations/ukg_ready,Medium
+Human Resources,Greenhouse,ATS,Inbound,Import hired candidates into Deel onboarding flow,Yes,https://www.deel.com/integrations/,High
+Human Resources,Lever,ATS,Inbound,Import hired candidates from Lever ATS,Yes,https://www.deel.com/integrations/,Medium
+Human Resources,Rippling,HRIS,Bi-directional,HR data sync (competitive overlap),Partial,Multiple sources,Medium
+Human Resources,Stello AI,HR / Performance,Unknown,AI-powered HR analytics / performance management,Yes,https://www.deel.com/integrations/stello-ai,Low
+Human Resources,HR Metrics,Multi-category,Unknown,HR analytics integration,Yes,https://www.deel.com/integrations/hr-metrics,Low
+Accounting,QuickBooks,Accounting,Outbound,Export payroll journal entries and invoices to QuickBooks,Yes,https://www.deel.com/integrations/,High
+Accounting,Xero,Accounting,Outbound,Export payroll and invoice data to Xero,Yes,https://www.deel.com/integrations/,High
+Accounting,NetSuite,Accounting,Outbound,ERP-level payroll and expense sync,Yes,https://www.deel.com/integrations/,High
+Accounting,Acumatica,Accounting,Unknown,Cloud ERP integration for payroll accounting,Yes,https://www.deel.com/integrations/acumatica-integration,Medium
+Accounting,Sage,Accounting,Outbound,Payroll journal sync to Sage accounting,Yes,https://www.deel.com/integrations/,Medium
+Collaboration,Slack,Collaboration,Outbound,Notifications for contract signings approvals and alerts,Yes,https://www.deel.com/integrations/,High
+Collaboration,Microsoft Teams,Collaboration,Outbound,Notifications and approval workflows via Teams,Yes,deel.com/pricing (Enterprise dedicated channel),High
+Performance Management,Culture Amp,Performance,Unknown,Employee engagement and performance survey sync,Yes,https://www.deel.com/integrations/,Medium
+Automation & Productivity,Zapier,Automation,Bi-directional,No-code workflow automation connecting Deel to 5000+ apps,Yes,https://www.deel.com/integrations/,High
+Automation & Productivity,Make (Integromat),Automation,Bi-directional,Visual workflow automation with Deel triggers/actions,Yes,https://www.deel.com/integrations/,Medium
+KYC / Identity,Veriff,Identity Verification,Inbound,Contractor identity verification (document + liveness check),Yes,https://help.letsdeel.com/hc/en-gb/articles/4407737887889,High
+Background Checks,Deel Background Checks,Internal,Internal,Managed end-to-end background checks in 190+ countries,Yes,https://www.deel.com/background-checks/,High
+Payroll Data / Analytics,Merge.dev,Unified API,Bi-directional,Unified HRIS/ATS API — Deel listed as supported source system,Yes,https://www.merge.dev/integrations/deel,Medium
+Developer / AI,MCP Server,AI Agent,Outbound,Deel MCP server for AI agent integration (LLM tool calls),Yes,https://developer.deel.com/mcp,High

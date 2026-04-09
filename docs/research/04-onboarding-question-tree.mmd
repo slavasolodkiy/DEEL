@@ -1,0 +1,73 @@
+---
+title: Deel Onboarding Question Tree (Public Sources Only)
+---
+stateDiagram-v2
+
+    [*] --> SignUp
+
+    SignUp --> WorkerTypeSelect : "Sign up with company email\n(first user = org admin)"
+
+    WorkerTypeSelect --> EOR_Employee : "Employee (via EOR)"
+    WorkerTypeSelect --> Contractor : "Contractor\n(self-employed)"
+    WorkerTypeSelect --> PersonProfile : "Person profile\n(no contract yet)"
+    WorkerTypeSelect --> GlobalPayroll : "Employee (own entity)\n= Global Payroll"
+    WorkerTypeSelect --> US_PEO : "US Employee\n(PEO co-employment)"
+
+    %% ─── EOR BRANCH ───────────────────────────────────────────────
+    EOR_Employee --> EOR_Country : "Select worker country"
+    EOR_Country --> EOR_Quote : "Request employment quote\n(includes gross salary, employer cost, Deel fee)"
+    EOR_Quote --> EOR_QuoteReview : "Quote ready (minutes → 1 business day)"
+    EOR_QuoteReview --> EOR_FundAccount : "Accept quote → Fund Deel account\n(bank transfer or card)"
+    EOR_FundAccount --> EOR_DepositPay : "Pay deposit + first month"
+    EOR_DepositPay --> EOR_ReviewAgreement : "Review Employment Agreement\n(jurisdiction-specific template)"
+    EOR_ReviewAgreement --> EOR_OnboardWorker : "Begin worker onboarding"
+    EOR_OnboardWorker --> WorkerKYC
+
+    %% ─── CONTRACTOR BRANCH ─────────────────────────────────────────
+    Contractor --> Contractor_EntityType : "Individual or Entity (company)?"
+    Contractor_EntityType --> Ind_Contractor : "Individual contractor"
+    Contractor_EntityType --> Entity_Contractor : "Entity / company contractor"
+
+    Ind_Contractor --> Contractor_Country : "Select worker country"
+    Entity_Contractor --> Entity_Country : "Select entity country"
+    Entity_Contractor --> Entity_Docs : "Entity verification docs\n(articles of incorporation, etc.)"
+    Entity_Docs --> Contractor_Country
+
+    Contractor_Country --> Contract_Type : "Fixed-rate / Pay-as-you-go\n/ Milestones / Time & Materials"
+    Contract_Type --> Contract_Currency : "Select payment currency"
+    Contract_Currency --> Contract_Terms : "Set rate, scope, start date"
+    Contract_Terms --> Contractor_Sign : "Invite worker to sign"
+    Contractor_Sign --> WorkerKYC
+
+    %% ─── WORKER KYC (all paths converge) ──────────────────────────
+    WorkerKYC --> KYC_Veriff : "Identity verification via Veriff\n(automated, minutes)"
+    WorkerKYC --> KYC_Manual : "Manual doc review (1 business day)\nif Veriff fails"
+    KYC_Veriff --> KYC_Pass
+    KYC_Manual --> KYC_Pass
+    KYC_Manual --> KYC_Fail : "Docs rejected"
+    KYC_Fail --> KYC_Manual : "Re-submit docs"
+    KYC_Pass --> BankSetup
+
+    BankSetup --> WithdrawalMethod : "Add withdrawal method\n(bank, Wise, Payoneer, crypto, etc.)"
+    WithdrawalMethod --> TaxInfo : "Tax details\n(W-9 / W-8BEN / local equivalent)"
+    TaxInfo --> Compliance_Docs : "Upload compliance documents\n(work permit, ID, etc. — country-specific)"
+    Compliance_Docs --> OnboardingComplete
+
+    %% ─── GLOBAL PAYROLL (own entity) ───────────────────────────────
+    GlobalPayroll --> GP_Entity : "Confirm local legal entity"
+    GP_Entity --> GP_Country : "Select payroll country"
+    GP_Country --> GP_EmployeeAdd : "Add employees"
+    GP_EmployeeAdd --> GP_PayrollRun : "Run payroll cycle"
+    GP_PayrollRun --> GP_Filing : "Deel handles tax filings"
+
+    %% ─── US PEO ────────────────────────────────────────────────────
+    US_PEO --> PEO_State : "Employee state (all 50 supported)"
+    PEO_State --> PEO_Benefits : "Select benefits package\n(healthcare, 401k, etc.)"
+    PEO_Benefits --> PEO_CoEmploy : "Co-employment agreement signed"
+    PEO_CoEmploy --> OnboardingComplete
+
+    %% ─── PERSON PROFILE ────────────────────────────────────────────
+    PersonProfile --> Profile_Basic : "Basic profile (name, email, country)"
+    Profile_Basic --> Profile_ContractLater : "Assign contract later\nor use as placeholder"
+
+    OnboardingComplete --> [*]

@@ -1,0 +1,34 @@
+Stage,Step,Worker Type,Required Input,Automated?,Manual Review?,Notes,Source,Confidence
+Pre-signup,Visit deel.com / pricing,All,None,N/A,No,Public marketing surface,https://www.deel.com/pricing/,High
+Signup,Create account (company email required for first org user),Client Admin,Email + password,Yes,No,First user = org admin; company email enforced,https://help.letsdeel.com/hc/en-gb/articles/4407737620113,High
+Signup,Email verification,All,Click email link,Yes,No,Standard email confirm flow,Inferred,Medium
+Org Setup,Company details (name / industry / size),Client Admin,Company info,No,No,Required before hiring,Inferred from EOR guide,Medium
+Org Setup,Billing method,Client Admin,Credit card or bank,No,No,Required to fund payroll,https://help.letsdeel.com/hc/en-gb/articles/4407737620113,High
+Worker Type Selection,Choose: Employee / Contractor / Person Profile / EOR / Global Payroll / US PEO,Client Admin,Radio/select,No,No,First branching decision; determines entire flow,https://help.letsdeel.com/hc/en-gb/articles/4407737620113,High
+EOR Flow,Select worker country (+ state/province where relevant),Client Admin,Country select,No,No,Determines quote and legal entity,https://help.letsdeel.com/hc/en-gb/articles/4407737620113,High
+EOR Flow,Request employment quote,Client Admin,Gross salary input,Partial (auto-calculation),Yes (can take up to 1 business day),Quote includes gross salary + employer cost + Deel fee,https://help.letsdeel.com/hc/en-gb/articles/4407737620113,High
+EOR Flow,Accept quote + fund Deel account,Client Admin,Bank transfer or card,No,No,Escrow-style deposit required,https://help.letsdeel.com/hc/en-gb/articles/4407737620113,High
+EOR Flow,Pay deposit + first payment,Client Admin,Payment confirmation,Partial,No,Triggers contract preparation,https://help.letsdeel.com/hc/en-gb/articles/4407737620113,High
+EOR Flow,Review & accept Employment Agreement,Client Admin,E-signature,No,No,Jurisdiction-specific template generated automatically,https://help.letsdeel.com/hc/en-gb/articles/4407737620113,High
+EOR Flow,Invite worker / begin worker onboarding,Client Admin,Worker email,Yes (invite email),No,Worker receives email to join platform,https://help.letsdeel.com/hc/en-gb/articles/4407737620113,High
+Contractor Flow,Select individual vs. entity contractor,Client Admin,Toggle,No,No,Entity path requires company docs,Inferred from public docs,High
+Contractor Flow,Select worker country,Client Admin,Country select,No,No,Determines contract template and payment rules,Inferred,High
+Contractor Flow,Select contract type (fixed / PAYG / milestone / time & materials),Client Admin,Select,No,No,Drives payment schedule and invoice logic,Inferred from API docs,High
+Contractor Flow,Set rate / currency / scope / start date,Client Admin,Form fields,No,No,Creates contract draft,Inferred from API docs,High
+Contractor Flow,Invite worker to sign contract,Client Admin,Worker email,Yes,No,Worker receives signing invite,https://developer.deel.com/api/contractors,High
+Worker KYC,Identity verification via Veriff (automated),Worker,Govt ID + selfie/liveness,Yes (Veriff),Fallback to manual,95%+ complete in minutes via Veriff,https://help.letsdeel.com/hc/en-gb/articles/4407737887889,High
+Worker KYC,Manual document review (if Veriff fails),Worker,Upload ID documents,No,Yes (Deel ops — 1 business day),Fallback path only,https://help.letsdeel.com/hc/en-gb/articles/4407737887889,High
+Worker KYC,Shareholder verification (entity contractors),Entity representative,Shareholder ID docs,Partial,Yes,Required for entity/company contractors,https://help.letsdeel.com/hc/en-gb/articles/4407737887889,High
+Worker Setup,Add withdrawal/payout method,Worker,Bank account / Wise / Payoneer / etc.,No,No,Required to withdraw funds; triggers account unlock,Inferred,High
+Worker Setup,Tax information (W-9 / W-8BEN / local equiv.),Worker,Tax form completion,No,Possible,Country-specific tax form,Inferred,High
+Worker Setup,Upload compliance documents,Worker,Country-specific docs (work permit / ID),No,Yes (compliance review),Country-driven document checklist,Inferred,High
+Worker Setup,Benefits enrollment (EOR),Worker,Plan selection,No,No,EOR workers enroll in local statutory + optional benefits,https://www.deel.com/pricing/,High
+Payroll / Pay,First payroll run,Client Admin,Approve payroll,Partial,No,Payroll scheduled; Deel files taxes automatically,https://www.deel.com/pricing/,High
+Background Check (optional),Order background check,Client Admin,Select check types,Yes,Partial (results review),190+ countries; >95% complete in minutes,https://www.deel.com/background-checks/,High
+US PEO,Select employee state,Client Admin,US state select,No,No,All 50 states supported,https://www.deel.com/pricing/,High
+US PEO,Benefits enrollment (PEO),Worker,Healthcare / 401k plan,No,No,Competitive benefit access provided by Deel,https://www.deel.com/pricing/,High
+US PEO,Co-employment agreement,Client Admin,E-signature,No,No,Legal co-employment relationship formalized,https://www.deel.com/pricing/,High
+Ongoing,Payslip access (worker),Worker,None,Yes,No,Auto-generated per pay cycle; downloadable PDF,https://www.deel.com/blog/new-deel-mobile-app/,High
+Ongoing,Time-off request / approval,Worker + Client Admin,Request form + approval,Partial,No,Workflow in HRIS module,https://www.deel.com/hr-platform/,High
+Ongoing,Contract amendment,Client Admin,Amendment form,No,No,Amendments managed via API; legally binding,https://developer.deel.com/api/employer-of-record/amendments,High
+Ongoing,Termination,Client Admin,Termination form + notice period,No,Partial (legal review),Resignation or termination workflow,https://developer.deel.com/api/employer-of-record,High

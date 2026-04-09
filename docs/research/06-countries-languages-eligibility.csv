@@ -1,0 +1,76 @@
+Country,ISO2,EOR Available,Global Payroll (own entity),Contractor,US PEO,Notes,Confidence
+Argentina,AR,Yes,Yes,Yes,No,,High
+Australia,AU,Yes,Yes,Yes,No,,High
+Austria,AT,Yes,Yes,Yes,No,,High
+Belgium,BE,Yes,Yes,Yes,No,,High
+Brazil,BR,Yes,Yes,Yes,No,,High
+Canada,CA,Yes,Yes,Yes,No,All provinces,High
+Chile,CL,Yes,Yes,Yes,No,,High
+China,CN,Yes,Yes,Yes,No,Complex regulatory environment,Medium
+Colombia,CO,Yes,Yes,Yes,No,,High
+Costa Rica,CR,Yes,Unknown,Yes,No,,Medium
+Croatia,HR,Yes,Yes,Yes,No,,Medium
+Czech Republic,CZ,Yes,Yes,Yes,No,,High
+Denmark,DK,Yes,Yes,Yes,No,,High
+Dominican Republic,DO,Yes,Unknown,Yes,No,,Medium
+Ecuador,EC,Yes,Unknown,Yes,No,,Medium
+Egypt,EG,Yes,Unknown,Yes,No,,Medium
+Estonia,EE,Yes,Yes,Yes,No,,Medium
+Finland,FI,Yes,Yes,Yes,No,,High
+France,FR,Yes,Yes,Yes,No,,High
+Germany,DE,Yes,Yes,Yes,No,,High
+Ghana,GH,Yes,Unknown,Yes,No,,Medium
+Greece,GR,Yes,Yes,Yes,No,,Medium
+Hong Kong,HK,Yes,Yes,Yes,No,,High
+Hungary,HU,Yes,Yes,Yes,No,,Medium
+India,IN,Yes,Yes,Yes,No,,High
+Indonesia,ID,Yes,Unknown,Yes,No,,Medium
+Ireland,IE,Yes,Yes,Yes,No,,High
+Israel,IL,Yes,Yes,Yes,No,,High
+Italy,IT,Yes,Yes,Yes,No,,High
+Japan,JP,Yes,Yes,Yes,No,,High
+Kenya,KE,Yes,Unknown,Yes,No,,Medium
+Latvia,LV,Yes,Yes,Yes,No,,Medium
+Lithuania,LT,Yes,Yes,Yes,No,,Medium
+Luxembourg,LU,Yes,Yes,Yes,No,,Medium
+Malaysia,MY,Yes,Yes,Yes,No,,High
+Mexico,MX,Yes,Yes,Yes,No,,High
+Netherlands,NL,Yes,Yes,Yes,No,,High
+New Zealand,NZ,Yes,Yes,Yes,No,,High
+Nigeria,NG,Yes,Unknown,Yes,No,,Medium
+Norway,NO,Yes,Yes,Yes,No,,High
+Pakistan,PK,Unknown,Unknown,Yes,No,Contractor only likely,Low
+Peru,PE,Yes,Yes,Yes,No,,Medium
+Philippines,PH,Yes,Yes,Yes,No,,High
+Poland,PL,Yes,Yes,Yes,No,,High
+Portugal,PT,Yes,Yes,Yes,No,,High
+Romania,RO,Yes,Yes,Yes,No,,Medium
+Saudi Arabia,SA,Yes,Unknown,Yes,No,,Medium
+Serbia,RS,Yes,Unknown,Yes,No,,Medium
+Singapore,SG,Yes,Yes,Yes,No,,High
+Slovakia,SK,Yes,Yes,Yes,No,,Medium
+Slovenia,SI,Yes,Yes,Yes,No,,Medium
+South Africa,ZA,Yes,Yes,Yes,No,,High
+South Korea,KR,Yes,Yes,Yes,No,,High
+Spain,ES,Yes,Yes,Yes,No,,High
+Sweden,SE,Yes,Yes,Yes,No,,High
+Switzerland,CH,Yes,Yes,Yes,No,,High
+Taiwan,TW,Yes,Yes,Yes,No,,Medium
+Thailand,TH,Yes,Unknown,Yes,No,,Medium
+Turkey,TR,Yes,Yes,Yes,No,,Medium
+Ukraine,UA,Unknown,Unknown,Yes,No,Conflict zone — EOR availability uncertain,Low
+United Arab Emirates,AE,Yes,Yes,Yes,No,,High
+United Kingdom,GB,Yes,Yes,Yes,No,,High
+United States,US,Yes (via PEO),Yes,Yes,Yes,All 50 states via PEO; $125/employee/month,High
+Uruguay,UY,Yes,Unknown,Yes,No,,Medium
+Vietnam,VN,Yes,Unknown,Yes,No,,Medium
+
+Notes:
+- EOR coverage: 150+ countries per deel.com (April 2026) — only major markets listed here
+- Global Payroll (own entity): 120-130 countries per deel.com
+- Contractor: 150+ countries — most permissive coverage tier
+- US PEO: US only — all 50 states — $125/employee/month
+- Currencies: 120+ supported for payroll and withdrawals
+- Languages: Platform primarily English; contracts generated in local language per jurisdiction (hypothesis — Medium confidence)
+- Data residency: EU data residency available (Enterprise plan — inferred from GDPR compliance claims)
+- Source: https://www.deel.com/solutions/payroll/eor/ | https://supportedcountries.com/deel/ | https://www.deel.com/pricing/
